@@ -49,14 +49,8 @@
       </CodeCoverageTargets>
       <TestPlans>
          <TestPlanReference
-            reference = "container:../EssentialFeed.xctestplan"
+            reference = "container:EssentialFeed.xctestplan"
             default = "YES">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:../EssentialFeedEndToEnd.xctestplan">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:../AllTestTargets.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>
