@@ -17,7 +17,6 @@ class URLSessionHTTPClientTests: XCTestCase {
 
     override func tearDown() {
         URLProtocolStub.stopInterceptingRequests()
-
     }
 
     func test_getfromURL_performsGetRequestWithURL() {
@@ -73,8 +72,8 @@ class URLSessionHTTPClientTests: XCTestCase {
 
         // Assertions
         XCTAssertEqual(receivedValues?.data, Self.emptyData)
-        XCTAssertEqual(receivedValues?.response.url, Self.anyHTTPURLResponse?.url)
-        XCTAssertEqual(receivedValues?.response.statusCode, Self.anyHTTPURLResponse?.statusCode)
+        XCTAssertEqual(receivedValues?.response.url, response?.url)
+        XCTAssertEqual(receivedValues?.response.statusCode, response?.statusCode)
     }
 
     // MARK: - helpers
@@ -171,7 +170,6 @@ class URLSessionHTTPClientTests: XCTestCase {
         // MARK: - Overrides
 
         override class func canInit(with request: URLRequest) -> Bool {
-            requestObserver?(request)
             return true
         }
 
@@ -180,6 +178,11 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
 
         override func startLoading() {
+            if let requestObserver = Self.requestObserver {
+                client?.urlProtocolDidFinishLoading(self)
+                return requestObserver(request)
+            }
+
             if let data = Self.stub?.data {
                 client?.urlProtocol(self, didLoad: data)
             }
