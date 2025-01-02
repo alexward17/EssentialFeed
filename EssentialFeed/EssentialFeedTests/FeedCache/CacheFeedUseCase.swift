@@ -33,12 +33,18 @@ class FeedStore {
     // MARK: - Properties
 
     var deleteCachedFeedCount = 0
+    var insertCallCount = 0
 
     // MARK: - Helpers
 
     func deleteCachedFeed() {
         deleteCachedFeedCount += 1
     }
+
+    func completeDeletion(with error: Error, at index: Int = .zero) {
+
+    }
+
 }
 
 class CacheFeedUseCase: XCTestCase {
@@ -53,6 +59,15 @@ class CacheFeedUseCase: XCTestCase {
         let items = [uniqueItem(), uniqueItem()]
         sut.save(items)
         XCTAssertEqual(store.deleteCachedFeedCount, 1)
+    }
+
+    func test_save_doesNotRequestCacheInsertionOnDeletionError() {
+        let (sut, store) = makeSUT()
+        let items = [uniqueItem(), uniqueItem()]
+        sut.save(items)
+        let deletionError = Self.anyError
+        store.completeDeletion(with: deletionError)
+        XCTAssertEqual(store.insertCallCount, .zero)
     }
 
     // MARK: - Helpers
