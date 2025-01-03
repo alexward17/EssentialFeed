@@ -107,8 +107,6 @@ class CacheFeedUseCase: XCTestCase {
             return
         }
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed, .insert(items, timestamp)])
-        XCTAssertEqual(insertedItems, items)
-        XCTAssertEqual(receivedTimestamp, timestamp)
     }
 
     // MARK: - Helpers
