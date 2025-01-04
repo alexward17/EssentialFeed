@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class LocalFeedLoader {
+public final class LocalFeedLoader {
 
     // MARK: - Properties
 
