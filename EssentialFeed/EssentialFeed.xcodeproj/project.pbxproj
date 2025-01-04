@@ -13,6 +13,8 @@
 		C715D4442D0BC6F90070CC83 /* LoadFeedFromRemoteUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C715D4432D0BC6F90070CC83 /* LoadFeedFromRemoteUseCaseTests.swift */; };
 		C715D4472D0E10790070CC83 /* RemoteFeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C715D4462D0E10790070CC83 /* RemoteFeedLoader.swift */; };
 		C73444CE2D272B85007199B4 /* CacheFeedUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73444CD2D272B85007199B4 /* CacheFeedUseCase.swift */; };
+		C73444D12D29D85B007199B4 /* LocalFeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73444D02D29D85B007199B4 /* LocalFeedLoader.swift */; };
+		C73444D32D29D875007199B4 /* FeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73444D22D29D875007199B4 /* FeedStore.swift */; };
 		C7741E322D15CE0E00917273 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7741E312D15CE0E00917273 /* HTTPClient.swift */; };
 		C7741E342D15CE9100917273 /* FeedItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7741E332D15CE9100917273 /* FeedItemMapper.swift */; };
 		C7D3C63F2D12341C00EE2A3B /* FeedItemEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D3C63E2D12341C00EE2A3B /* FeedItemEntity.swift */; };
@@ -51,6 +53,8 @@
 		C715D4432D0BC6F90070CC83 /* LoadFeedFromRemoteUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadFeedFromRemoteUseCaseTests.swift; sourceTree = "<group>"; };
 		C715D4462D0E10790070CC83 /* RemoteFeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoader.swift; sourceTree = "<group>"; };
 		C73444CD2D272B85007199B4 /* CacheFeedUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheFeedUseCase.swift; sourceTree = "<group>"; };
+		C73444D02D29D85B007199B4 /* LocalFeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFeedLoader.swift; sourceTree = "<group>"; };
+		C73444D22D29D875007199B4 /* FeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStore.swift; sourceTree = "<group>"; };
 		C7741E312D15CE0E00917273 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		C7741E332D15CE9100917273 /* FeedItemMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemMapper.swift; sourceTree = "<group>"; };
 		C7D3C63E2D12341C00EE2A3B /* FeedItemEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemEntity.swift; sourceTree = "<group>"; };
@@ -138,6 +142,7 @@
 		080EDF1021B6DFA200813479 /* Feed Feature */ = {
 			isa = PBXGroup;
 			children = (
+				C73444CF2D29D844007199B4 /* FeedCache */,
 				080EDF0B21B6DAE800813479 /* FeedItem.swift */,
 				C7D3C63E2D12341C00EE2A3B /* FeedItemEntity.swift */,
 				080EDF0D21B6DCB600813479 /* FeedLoader.swift */,
@@ -160,6 +165,15 @@
 			isa = PBXGroup;
 			children = (
 				C73444CD2D272B85007199B4 /* CacheFeedUseCase.swift */,
+			);
+			path = FeedCache;
+			sourceTree = "<group>";
+		};
+		C73444CF2D29D844007199B4 /* FeedCache */ = {
+			isa = PBXGroup;
+			children = (
+				C73444D02D29D85B007199B4 /* LocalFeedLoader.swift */,
+				C73444D22D29D875007199B4 /* FeedStore.swift */,
 			);
 			path = FeedCache;
 			sourceTree = "<group>";
@@ -326,12 +340,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C73444D32D29D875007199B4 /* FeedStore.swift in Sources */,
 				C7EBACF72D19DA2500662611 /* URLSessionHTTPClient.swift in Sources */,
 				080EDF0E21B6DCB600813479 /* FeedLoader.swift in Sources */,
 				C7741E322D15CE0E00917273 /* HTTPClient.swift in Sources */,
 				C715D4472D0E10790070CC83 /* RemoteFeedLoader.swift in Sources */,
 				C7741E342D15CE9100917273 /* FeedItemMapper.swift in Sources */,
 				080EDF0C21B6DAE800813479 /* FeedItem.swift in Sources */,
+				C73444D12D29D85B007199B4 /* LocalFeedLoader.swift in Sources */,
 				C7D3C63F2D12341C00EE2A3B /* FeedItemEntity.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

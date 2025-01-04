@@ -8,55 +8,6 @@
 import XCTest
 import EssentialFeed
 
-class LocalFeedLoader {
-
-    // MARK: - Properties
-
-    private let store: FeedStore
-    private let currentDate: () -> Date
-
-    // MARK: - Initializers
-
-    init(store: FeedStore, currentDate: @escaping () -> Date) {
-        self.store = store
-        self.currentDate = currentDate
-    }
-
-    // MARK: - Helpers
-
-    func save(_ items: [FeedItem], completion: @escaping ((Error?) -> Void)) {
-        store.deleteCachedFeed { [weak self] cacheDeletionError in
-            guard let self else { return }
-            guard cacheDeletionError == nil else {
-                completion(cacheDeletionError)
-                return
-            }
-            cache(items, with: completion)
-        }
-    }
-
-    private func cache(_ items: [FeedItem], with completion: @escaping ((Error?) -> Void)) {
-        store.insert(items, timestamp: currentDate(), completion: { [weak self] cacheInsertionError in
-            guard self != nil else { return }
-            completion(cacheInsertionError)
-        })
-    }
-
-}
-
-protocol FeedStore {
-
-    // MARK: - Types
-
-    typealias DeletionCompletion = (Error?) -> Void
-    typealias InsertionCompletion = (Error?) -> Void
-
-    func deleteCachedFeed(completion: @escaping DeletionCompletion)
-
-    func insert(_ items: [FeedItem], timestamp: Date, completion: @escaping InsertionCompletion)
-
-}
-
 class CacheFeedUseCase: XCTestCase {
 
     func test_init_doesNotMessageStoreUponCreation() {
@@ -173,7 +124,7 @@ class CacheFeedUseCase: XCTestCase {
         FeedItem(id: UUID(), imageURL: Self.mockURL)
     }
 
-    // MARK: - Spy
+    // MARK: - Spies
 
     private class FeedStoreSpy: FeedStore {
 
