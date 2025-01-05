@@ -32,15 +32,5 @@ public struct LocalFeedItem: Equatable {
         self.location = location
         self.imageURL = imageURL
     }
-
-    public init?(entity: FeedItemEntity) {
-        self.id = UUID(uuidString: entity.id) ?? UUID()
-        self.description = entity.description
-        self.location = entity.location
-        guard let url = URL(string: entity.image) else {
-            return nil
-        }
-        self.imageURL = url
-    }
 }
 
