@@ -1,5 +1,5 @@
 //
-//  RemoteFeedItem.swift
+//  RemoteFeedImage.swift
 //  EssentialFeed
 //
 //  Created by Alex Ward on 2025-01-05.

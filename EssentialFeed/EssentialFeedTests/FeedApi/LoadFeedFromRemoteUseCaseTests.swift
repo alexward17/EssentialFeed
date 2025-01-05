@@ -106,13 +106,13 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         return  try! JSONSerialization.data(withJSONObject: JSON)
     }
 
-    private func makeItem(id: UUID, description: String? = nil, location: String? = nil, imageURL: URL) -> (model: FeedItem, json: [String: Any]) {
-       let item = FeedItem(id: id, description: description, location: location, imageURL: imageURL)
+    private func makeItem(id: UUID, description: String? = nil, location: String? = nil, imageURL: URL) -> (model: FeedImage, json: [String: Any]) {
+       let item = FeedImage(id: id, description: description, location: location, url: imageURL)
         let itemJSON = [
             "id": item.id.uuidString,
             "description": item.description,
             "location": item.location,
-            "image": item.imageURL.absoluteString
+            "image": item.url.absoluteString
         ]
         return (item, itemJSON.compactMapValues({ $0 as Any }))
     }
