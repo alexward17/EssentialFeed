@@ -10,6 +10,7 @@ import Foundation
 public final class LocalFeedLoader {
 
     public typealias SaveResult = Error
+    public typealias LoadResult = LoadFeedResult
 
     // MARK: - Properties
 
@@ -36,9 +37,13 @@ public final class LocalFeedLoader {
         }
     }
 
-    public func load(completion: @escaping ((SaveResult?) -> Void)) {
-        store.retrieve { [weak self] retrievalError in
-            completion(retrievalError)
+    public func load(completion: @escaping ((LoadResult) -> Void)) {
+        store.retrieve { [weak self] error in
+            guard let error else {
+                completion(.success([]))
+                return
+            }
+            completion(.failure(error))
         }
     }
 
