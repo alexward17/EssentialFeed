@@ -30,7 +30,6 @@ class FeedStoreSpy: FeedStore {
     private var deletionCompletions = [DeletionCompletion]()
     private var insertionCompletions = [InsertionCompletion]()
     private var retrievalCompletions = [RetrievalCompletion]()
-    var retrievedFeedImages: [LocalFeedImage] = []
 
     // MARK: - Helpers
 
@@ -65,13 +64,11 @@ class FeedStoreSpy: FeedStore {
     }
 
     func completeRetrievalWithEmptyCache(at index: Int = .zero) {
-        retrievedFeedImages = []
         retrievalCompletions[index](.empty)
     }
 
     func completeRetrieval(with feed: [LocalFeedImage], timestamp: Date, at index: Int = .zero) {
         // make sure the timestamp is less than 7 days old
-        retrievedFeedImages = feed
         retrievalCompletions[index]((.found(feed: feed, timestamp: timestamp)))
     }
 
