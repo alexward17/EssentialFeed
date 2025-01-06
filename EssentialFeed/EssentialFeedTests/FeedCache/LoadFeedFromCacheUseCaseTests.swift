@@ -43,7 +43,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(receivedError as NSError?, retrievalError)
     }
 
-    func test_load_deliversNotImagesOnEmptyCache() {
+    func test_load_deliversNoImagesOnEmptyCache() {
         let (sut, store) = makeSUT()
         var receivedImages = [FeedImage]()
 
@@ -57,11 +57,32 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
             exp.fulfill()
         }
 
-        store.completeRetrievalSuccessfully()
+        store.completeRetrievalWithEmptyCache()
 
         wait(for: [exp], timeout: 5)
 
         XCTAssertEqual(receivedImages, [])
+    }
+
+    func test_load_deliversImagesOnLoadFromCache() {
+        let (sut, store) = makeSUT()
+        var receivedImages = [FeedImage]()
+        let retrievedImages = uniqueImageFeed().models
+        let exp = expectation(description: "Wait for Completion")
+        sut.load { result in
+            guard case let .success(images) = result else {
+                XCTFail("Should have succeeded")
+                return
+            }
+            receivedImages = images
+            exp.fulfill()
+        }
+
+        store.completeRetrieval(with: retrievedImages)
+
+        wait(for: [exp], timeout: 5)
+
+        XCTAssertEqual(receivedImages, retrievedImages)
     }
 
     // MARK: Helpers
@@ -74,6 +95,15 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, store)
+    }
+
+    private func uniqueImage() -> FeedImage {
+        FeedImage(id: UUID(), url: Self.mockURL)
+    }
+
+    private func uniqueImageFeed() -> (models: [FeedImage], local: [LocalFeedImage]) {
+        let feed = [uniqueImage(), uniqueImage()]
+        return (feed, feed.toLocal())
     }
 
 }

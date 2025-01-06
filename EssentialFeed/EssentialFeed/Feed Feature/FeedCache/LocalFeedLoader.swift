@@ -39,8 +39,9 @@ public final class LocalFeedLoader {
 
     public func load(completion: @escaping ((LoadResult) -> Void)) {
         store.retrieve { [weak self] error in
+            guard let self else { return }
             guard let error else {
-                completion(.success([]))
+                completion(.success(store.retrievedFeedImages))
                 return
             }
             completion(.failure(error))

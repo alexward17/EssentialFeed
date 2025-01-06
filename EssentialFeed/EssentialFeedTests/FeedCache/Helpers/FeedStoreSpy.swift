@@ -30,6 +30,7 @@ class FeedStoreSpy: FeedStore {
     private var deletionCompletions = [DeletionCompletion]()
     private var insertionCompletions = [InsertionCompletion]()
     private var retrievalCompletions = [RetrievalCompletion]()
+    var retrievedFeedImages: [FeedImage] = []
 
     // MARK: - Helpers
 
@@ -63,7 +64,13 @@ class FeedStoreSpy: FeedStore {
         retrievalCompletions[index](error)
     }
 
-    func completeRetrievalSuccessfully(at index: Int = .zero) {
+    func completeRetrievalWithEmptyCache(at index: Int = .zero) {
+        retrievedFeedImages = []
+        retrievalCompletions[index](nil)
+    }
+
+    func completeRetrieval(with images: [FeedImage], at index: Int = .zero) {
+        retrievedFeedImages = images
         retrievalCompletions[index](nil)
     }
 
