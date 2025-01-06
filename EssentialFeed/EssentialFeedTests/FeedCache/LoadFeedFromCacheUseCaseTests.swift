@@ -25,64 +25,27 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     func test_load_failsOnRetrievalError() {
         let (sut, store) = makeSUT()
         let retrievalError = Self.anyError
-        var receivedError: Error?
 
-        let exp = expectation(description: "Wait for Completion")
-        sut.load { result in
-            guard case let .failure(error) = result else {
-                XCTFail("Should have failed")
-                return
-            }
-            receivedError = error
-            exp.fulfill()
-        }
-        store.completeRetrieval(with: retrievalError)
+        expect(sut, toCompleteWith: .failure(retrievalError), when: {
+            store.completeRetrieval(with: retrievalError)
 
-        wait(for: [exp], timeout: 5)
-
-        XCTAssertEqual(receivedError as NSError?, retrievalError)
+        })
     }
 
     func test_load_deliversNoImagesOnEmptyCache() {
         let (sut, store) = makeSUT()
-        var receivedImages = [FeedImage]()
-
-        let exp = expectation(description: "Wait for Completion")
-        sut.load { result in
-            guard case let .success(images) = result else {
-                XCTFail("Should have succeeded")
-                return
-            }
-            receivedImages = images
-            exp.fulfill()
-        }
-
-        store.completeRetrievalWithEmptyCache()
-
-        wait(for: [exp], timeout: 5)
-
-        XCTAssertEqual(receivedImages, [])
+        expect(sut, toCompleteWith: .success([]),
+            when: { store.completeRetrievalWithEmptyCache() },
+            file: #file, line: #line)
     }
 
     func test_load_deliversImagesOnLoadFromCache() {
         let (sut, store) = makeSUT()
-        var receivedImages = [FeedImage]()
         let retrievedImages = uniqueImageFeed().models
-        let exp = expectation(description: "Wait for Completion")
-        sut.load { result in
-            guard case let .success(images) = result else {
-                XCTFail("Should have succeeded")
-                return
-            }
-            receivedImages = images
-            exp.fulfill()
-        }
-
-        store.completeRetrieval(with: retrievedImages)
-
-        wait(for: [exp], timeout: 5)
-
-        XCTAssertEqual(receivedImages, retrievedImages)
+        expect(sut, toCompleteWith: .success(retrievedImages),
+               when: { store.completeRetrieval(with: retrievedImages) },
+               file: #file, line: #line
+        )
     }
 
     // MARK: Helpers
@@ -95,6 +58,31 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, store)
+    }
+
+    private func expect(
+        _ sut: LocalFeedLoader,
+        toCompleteWith expectedResult: LocalFeedLoader.LoadResult,
+        when action: () -> Void,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+
+        let exp = expectation(description: "Wait for Completion")
+        sut.load { receivedResult in
+            switch (receivedResult, expectedResult) {
+            case let (.success(receivedImages), .success(expectedImages)):
+                XCTAssertEqual(receivedImages, expectedImages, file: file, line: line)
+            case let (.failure(receivedError as NSError), .failure(expectedError as NSError)):
+                XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+
+            default: XCTFail("Unexpected Result", file: file, line: line)
+            }
+            exp.fulfill()
+        }
+
+        action()
+        wait(for: [exp], timeout: 5)
     }
 
     private func uniqueImage() -> FeedImage {
