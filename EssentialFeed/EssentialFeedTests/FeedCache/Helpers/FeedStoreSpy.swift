@@ -16,7 +16,7 @@ class FeedStoreSpy: FeedStore {
 
     typealias DeletionCompletion = (Error?) -> Void
     typealias InsertionCompletion = (Error?) -> Void
-    typealias RetrievalCompletion = (Error?) -> Void
+    typealias RetrievalCompletion = (RetrieveCachedFeedResult) -> Void
 
     // MARK: - Properties
 
@@ -30,7 +30,7 @@ class FeedStoreSpy: FeedStore {
     private var deletionCompletions = [DeletionCompletion]()
     private var insertionCompletions = [InsertionCompletion]()
     private var retrievalCompletions = [RetrievalCompletion]()
-    var retrievedFeedImages: [FeedImage] = []
+    var retrievedFeedImages: [LocalFeedImage] = []
 
     // MARK: - Helpers
 
@@ -61,17 +61,18 @@ class FeedStoreSpy: FeedStore {
     }
 
     func completeRetrieval(with error: Error, at index: Int = .zero) {
-        retrievalCompletions[index](error)
+        retrievalCompletions[index](.failure(error))
     }
 
     func completeRetrievalWithEmptyCache(at index: Int = .zero) {
         retrievedFeedImages = []
-        retrievalCompletions[index](nil)
+        retrievalCompletions[index](.empty)
     }
 
-    func completeRetrieval(with images: [FeedImage], at index: Int = .zero) {
-        retrievedFeedImages = images
-        retrievalCompletions[index](nil)
+    func completeRetrieval(with feed: [LocalFeedImage], timestamp: Date, at index: Int = .zero) {
+        // make sure the timestamp is less than 7 days old
+        retrievedFeedImages = feed
+        retrievalCompletions[index]((.found(feed: feed, timestamp: timestamp)))
     }
 
     func retrieve(completion: @escaping RetrievalCompletion) {

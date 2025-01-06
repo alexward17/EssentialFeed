@@ -25,27 +25,23 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     func test_load_failsOnRetrievalError() {
         let (sut, store) = makeSUT()
         let retrievalError = Self.anyError
-
-        expect(sut, toCompleteWith: .failure(retrievalError), when: {
-            store.completeRetrieval(with: retrievalError)
-
-        })
+        expect(sut, toCompleteWith: .failure(retrievalError), when: { store.completeRetrieval(with: retrievalError)})
     }
 
     func test_load_deliversNoImagesOnEmptyCache() {
         let (sut, store) = makeSUT()
-        expect(sut, toCompleteWith: .success([]),
-            when: { store.completeRetrievalWithEmptyCache() },
-            file: #file, line: #line)
+        expect(sut, toCompleteWith: .success([]), when: { store.completeRetrievalWithEmptyCache() })
     }
 
-    func test_load_deliversImagesOnLoadFromCache() {
-        let (sut, store) = makeSUT()
-        let retrievedImages = uniqueImageFeed().models
-        expect(sut, toCompleteWith: .success(retrievedImages),
-               when: { store.completeRetrieval(with: retrievedImages) },
-               file: #file, line: #line
-        )
+    func test_load_deliversCachedImagesOnLessThan7DaysOldCache() {
+        let feed = uniqueImageFeed()
+        let fixedCurrentDate = Date.init()
+        let lessThan7DaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
+
+        expect(sut, toCompleteWith: .success(feed.models), when: {
+            store.completeRetrieval(with: feed.local, timestamp: lessThan7DaysOldTimestamp)
+        })
     }
 
     // MARK: Helpers
@@ -94,4 +90,14 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         return (feed, feed.toLocal())
     }
 
+}
+
+private extension Date {
+    func adding(days: Int) -> Date {
+        Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
+    }
+
+    func adding(seconds: TimeInterval) -> Date {
+        self + seconds
+    }
 }
