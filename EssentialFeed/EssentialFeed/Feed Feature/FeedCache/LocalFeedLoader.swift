@@ -31,6 +31,16 @@ public final class LocalFeedLoader {
 
     // MARK: - Helpers
 
+    private func validate(_ timestamp: Date) -> Bool {
+        guard let maxCacheAge = calendar.date(byAdding: .day, value: MAX_CACHE_AGE_IN_DAYS, to: timestamp) else {
+            return false
+        }
+        return currentDate() < maxCacheAge
+    }
+
+}
+
+extension LocalFeedLoader {
     public func save(_ feed: [FeedImage], completion: @escaping ((SaveResult?) -> Void)) {
         store.deleteCachedFeed { [weak self] cacheDeletionError in
             guard let self else { return }
@@ -42,6 +52,15 @@ public final class LocalFeedLoader {
         }
     }
 
+    private func cache(_ feed: [FeedImage], with completion: @escaping ((SaveResult?) -> Void)) {
+        store.insert(feed.toLocal(), timestamp: currentDate(), completion: { [weak self] cacheInsertionError in
+            guard self != nil else { return }
+            completion(cacheInsertionError)
+        })
+    }
+}
+
+extension LocalFeedLoader {
     public func load(completion: @escaping ((LoadResult) -> Void)) {
         store.retrieve { [weak self] result in
             guard let self else { return }
@@ -57,7 +76,9 @@ public final class LocalFeedLoader {
             }
         }
     }
+}
 
+extension LocalFeedLoader {
     public func validateCache() {
         store.retrieve { [weak self] result in
             guard let self else { return }
@@ -72,21 +93,6 @@ public final class LocalFeedLoader {
             }
         }
     }
-
-    private func cache(_ feed: [FeedImage], with completion: @escaping ((SaveResult?) -> Void)) {
-        store.insert(feed.toLocal(), timestamp: currentDate(), completion: { [weak self] cacheInsertionError in
-            guard self != nil else { return }
-            completion(cacheInsertionError)
-        })
-    }
-
-    private func validate(_ timestamp: Date) -> Bool {
-        guard let maxCacheAge = calendar.date(byAdding: .day, value: MAX_CACHE_AGE_IN_DAYS, to: timestamp) else {
-            return false
-        }
-        return currentDate() < maxCacheAge
-    }
-
 }
 
 public extension Array where Element == FeedImage {
