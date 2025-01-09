@@ -41,6 +41,6 @@ extension Date {
     }
 
     func minusFeedCacheMaxAge() -> Date {
-        adding(days: -FeedCachePolicy.MAX_CACHE_AGE_IN_DAYS)
+        adding(days: -FeedCachePolicy.MAX_FEED_CACHE_AGE_IN_DAYS)
     }
 }
