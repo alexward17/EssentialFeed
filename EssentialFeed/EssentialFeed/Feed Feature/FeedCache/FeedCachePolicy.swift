@@ -7,11 +7,11 @@
 
 import Foundation
 
-internal enum FeedCachePolicy {
+public enum FeedCachePolicy {
 
     // MARK: - Constants
 
-    static let MAX_CACHE_AGE_IN_DAYS: Int = 7
+   public static let MAX_CACHE_AGE_IN_DAYS: Int = 7
 
     // MARK: - Properties
 
