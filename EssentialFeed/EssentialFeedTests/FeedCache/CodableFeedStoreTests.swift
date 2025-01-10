@@ -21,14 +21,31 @@ class CodableFeedStore {
 class CodableFeedStoreTests: XCTestCase {
 
     func test_retrieve_deliversEmptyOnEmptyCache() {
-
         let sut = CodableFeedStore()
-
         let exp = expectation(description: "Await Completion")
         sut.retrieve { result in
             guard case .empty = result else {
                 XCTFail("Unexpected Result")
                 return
+            }
+            exp.fulfill()
+        }
+
+        wait(for: [exp], timeout: 5)
+    }
+
+    func test_retrieve_hasNoSideEffectOnEmptyCache() {
+        let sut = CodableFeedStore()
+        
+        let exp = expectation(description: "Await Completion")
+
+        sut.retrieve { firstResult in
+            sut.retrieve { secondResult in
+                switch (firstResult, secondResult) {
+                case (.empty, .empty):
+                    break
+                default: XCTFail("Unexpected Result")
+                }
             }
             exp.fulfill()
         }
