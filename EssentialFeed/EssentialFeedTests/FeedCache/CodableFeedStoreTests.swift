@@ -149,6 +149,9 @@ class CodableFeedStoreTests: XCTestCase {
 
     // MARK: - Test Helpers
 
+    let storeURL: URL =
+         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
+
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> CodableFeedStore {
         let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
         let sut = CodableFeedStore(storeURL: url)
@@ -157,8 +160,6 @@ class CodableFeedStoreTests: XCTestCase {
     }
 
     private func clearCacheFromDisk() {
-        let storeURL: URL =
-             FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
          try? FileManager.default.removeItem(at: storeURL)
     }
 
