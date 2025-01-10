@@ -17,8 +17,26 @@ class CodableFeedStore {
     typealias InsertionCompletion = (Error?) -> Void
 
     private struct Cache: Codable {
-        let feed: [LocalFeedImage]
+        let feed: [CodableFeedImage]
         let timestamp: Date
+    }
+
+    struct CodableFeedImage: Codable {
+        let id: UUID
+        let description: String?
+        let location: String?
+        let url: URL
+
+        var local: LocalFeedImage {
+            LocalFeedImage(id: id, description: description, location: location, url: url)
+        }
+
+        init(from local: LocalFeedImage) {
+            self.id = local.id
+            self.description = local.description
+            self.location = local.location
+            self.url = local.url
+        }
     }
 
     // MARK: - Properties
@@ -32,7 +50,8 @@ class CodableFeedStore {
         timestamp: Date,
         completion: @escaping InsertionCompletion) {
             let encoder = JSONEncoder()
-            guard let encodedValues = try? encoder.encode(Cache(feed: feed, timestamp: timestamp)) else {
+            let codableFeed = feed.map(CodableFeedImage.init)
+            guard let encodedValues = try? encoder.encode(Cache(feed: codableFeed, timestamp: timestamp)) else {
                 return
             }
             try! encodedValues.write(to: storeURL)
@@ -45,8 +64,10 @@ class CodableFeedStore {
             completion(.empty)
             return
         }
-
-        completion(.found(feed: cache.feed, timestamp: cache.timestamp))
+        let localImages = cache.feed.map({
+            $0.local
+        })
+        completion(.found(feed: localImages, timestamp: cache.timestamp))
 
     }
 }
