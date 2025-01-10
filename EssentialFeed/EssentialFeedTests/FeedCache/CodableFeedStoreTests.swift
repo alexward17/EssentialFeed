@@ -82,12 +82,12 @@ class CodableFeedStoreTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        clearCacheFromDisk()
+        clearStoredCacheArtifactsFromDisk()
     }
 
     override func tearDown() {
         super.tearDown()
-        clearCacheFromDisk()
+        clearStoredCacheArtifactsFromDisk()
     }
 
     func test_retrieve_deliversEmptyOnEmptyCache() {
@@ -159,9 +159,8 @@ class CodableFeedStoreTests: XCTestCase {
         return sut
     }
 
-    private func clearCacheFromDisk() {
+    private func clearStoredCacheArtifactsFromDisk() {
          try? FileManager.default.removeItem(at: testSpecificStoreURL)
     }
-
 
 }
