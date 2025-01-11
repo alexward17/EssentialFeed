@@ -147,6 +147,38 @@ class CodableFeedStoreTests: XCTestCase {
         wait(for: [exp], timeout: 1)
     }
 
+    func test_retrieve_asNoSideEffectWhenCacheHasStoredData() {
+        let sut = makeSUT()
+
+        let expectedLocalFeed = uniqueImageFeed().local
+        let expectedTimestamp = Date()
+        let exp = expectation(description: "Await Completion")
+
+        sut.insert(expectedLocalFeed, timestamp: expectedTimestamp) { insertionError in
+            XCTAssertNil(insertionError, "Unexpected Error")
+            sut.retrieve { firstResult in
+                sut.retrieve { secondResult in
+
+                    switch (firstResult, secondResult) {
+                    case let (.found(feed: firstFeed, timestamp: firstTimestamp),
+                              .found(feed: secondFeed, timestamp: secondTimestamp)):
+                        XCTAssertEqual(firstFeed, expectedLocalFeed)
+                        XCTAssertEqual(firstTimestamp, expectedTimestamp)
+
+                        XCTAssertEqual(secondFeed, expectedLocalFeed)
+                        XCTAssertEqual(secondTimestamp, expectedTimestamp)
+                        exp.fulfill()
+                    default:
+                        XCTFail("Unexpected Result")
+                    }
+                }
+
+            }
+        }
+
+        wait(for: [exp], timeout: 1)
+    }
+
     // MARK: - Test Helpers
 
     let testSpecificStoreURL: URL =
