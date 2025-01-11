@@ -23,8 +23,16 @@ public protocol FeedStore {
 
     // MARK: - Functions
 
+    /// The completion handler can be invoked on any thread.
+    /// Clients are responsible for dispatching to appropriate threads if needed.
     func deleteCachedFeed(completion: @escaping DeletionCompletion)
+
+    /// The completion handler can be invoked on any thread.
+    /// Clients are responsible for dispatching to appropriate threads if needed.
     func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion)
+
+    /// The completion handler can be invoked on any thread.
+    /// Clients are responsible for dispatching to appropriate threads if needed.
     func retrieve(completion: @escaping RetrievalCompletion)
 
 }
