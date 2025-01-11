@@ -65,17 +65,22 @@ class CodableFeedStore {
     }
 
     func retrieve(completion: @escaping RetrievalCompletion) {
-        guard let data = try? Data(contentsOf: storeURL),
-              let cache = try? JSONDecoder().decode(Cache.self, from: data) else {
+        guard let data = try? Data(contentsOf: storeURL) else {
             completion(.empty)
             return
         }
-        let localImages = cache.feed.map({
-            $0.local
-        })
-        completion(.found(feed: localImages, timestamp: cache.timestamp))
 
+        do {
+            let cache = try JSONDecoder().decode(Cache.self, from: data)
+            let localImages = cache.feed.map({
+                $0.local
+            })
+            completion(.found(feed: localImages, timestamp: cache.timestamp))
+        } catch {
+            completion(.failure(error))
+        }
     }
+
 }
 
 class CodableFeedStoreTests: XCTestCase {
@@ -110,13 +115,31 @@ class CodableFeedStoreTests: XCTestCase {
         expect(sut, toRetrieve: .found(feed: expectedLocalFeed, timestamp: expectedTimestamp))
     }
 
-    func test_retrieve_asNoSideEffectOnNonEmptyCache() {
+    func test_retrieve_hasNoSideEffectOnNonEmptyCache() {
         let sut = makeSUT()
         let expectedLocalFeed = uniqueImageFeed().local
         let expectedTimestamp = Date()
 
         insert((expectedLocalFeed, expectedTimestamp), to: sut)
         expect(sut, toRetrieveTwice: .found(feed: expectedLocalFeed, timestamp: expectedTimestamp))
+    }
+
+    func test_retrieve_deliversErrorOnRetrievalError() {
+        let sut = makeSUT()
+        let expectedError = Self.anyError
+
+        try! "invalid data".write(to: testSpecificStoreURL, atomically: true, encoding: .utf8)
+
+        expect(sut, toRetrieve: .failure(expectedError))
+    }
+
+    func test_retrieve_hasNoSideEffectOnRetrievalError() {
+        let sut = makeSUT()
+        let expectedError = Self.anyError
+
+        try! "invalid data".write(to: testSpecificStoreURL, atomically: true, encoding: .utf8)
+
+        expect(sut, toRetrieveTwice: .failure(expectedError))
     }
 
     // MARK: - Test Helpers
@@ -156,7 +179,8 @@ class CodableFeedStoreTests: XCTestCase {
         sut.retrieve { retrievedResult in
             switch (expectedResult, retrievedResult) {
 
-            case (.empty, .empty):
+            case (.empty, .empty),
+                (.failure, .failure):
                 break
 
             case let (.found(feed: expectedFeed, timestamp: expectedTimestamp),
@@ -164,7 +188,8 @@ class CodableFeedStoreTests: XCTestCase {
                 XCTAssertEqual(expectedFeed, retrievedFeed, file: file, line: line)
                 XCTAssertEqual(expectedTimestamp, retrievedTimestamp, file: file, line: line)
 
-            default: XCTFail("Unexpected result: \(retrievedResult)", file: file, line: line)
+            default:
+                XCTFail("Unexpected result: \(retrievedResult)", file: file, line: line)
             }
             exp.fulfill()
         }
