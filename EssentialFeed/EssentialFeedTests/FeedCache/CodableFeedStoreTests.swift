@@ -55,14 +55,16 @@ class CodableFeedStore {
         _ feed: [LocalFeedImage],
         timestamp: Date,
         completion: @escaping InsertionCompletion) {
-            let encoder = JSONEncoder()
-            let codableFeed = feed.map(CodableFeedImage.init)
-            guard let encodedValues = try? encoder.encode(Cache(feed: codableFeed, timestamp: timestamp)) else {
-                return
+            do {
+                let encoder = JSONEncoder()
+                let codableFeed = feed.map(CodableFeedImage.init)
+                let encodedValues = try encoder.encode(Cache(feed: codableFeed, timestamp: timestamp))
+                try encodedValues.write(to: storeURL)
+                completion(nil)
+            } catch {
+                completion(error)
             }
-            try! encodedValues.write(to: storeURL)
-            completion(nil)
-    }
+        }
 
     func retrieve(completion: @escaping RetrievalCompletion) {
         guard let data = try? Data(contentsOf: storeURL) else {
@@ -159,6 +161,16 @@ class CodableFeedStoreTests: XCTestCase {
         expect(sut, toRetrieve: .found(feed: latestImageFeed, timestamp: latestTimestamp))
     }
 
+    func test_insert_deliversErrorOnInsertionError() {
+        let invalidStoreURL = URL(fileURLWithPath: "/invalid/store")
+        let timestamp = Date()
+        let sut = makeSUT(storeURL: invalidStoreURL)
+
+        let insertionError = insert((feed: uniqueImageFeed().local, timestamp: timestamp), to: sut)
+
+        XCTAssertNotNil(insertionError, "Expected to receive an error")
+    }
+
     // MARK: - Test Helpers
 
     let testSpecificStoreURL: URL =
@@ -224,7 +236,7 @@ class CodableFeedStoreTests: XCTestCase {
     }
 
     private func clearStoredCacheArtifactsFromDisk() {
-         try? FileManager.default.removeItem(at: testSpecificStoreURL)
+        try? FileManager.default.removeItem(at: testSpecificStoreURL)
     }
 
 }
