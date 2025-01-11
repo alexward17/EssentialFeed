@@ -105,14 +105,7 @@ class CodableFeedStoreTests: XCTestCase {
 
         let expectedLocalFeed = uniqueImageFeed().local
         let expectedTimestamp = Date()
-        let exp = expectation(description: "Await Completion")
-
-        sut.insert(expectedLocalFeed, timestamp: expectedTimestamp) { insertionError in
-            XCTAssertNil(insertionError, "Unexpected Error")
-            exp.fulfill()
-        }
-
-        wait(for: [exp], timeout: 1)
+        insert((expectedLocalFeed, expectedTimestamp), to: sut)
 
         expect(sut, toRetrieve: .found(feed: expectedLocalFeed, timestamp: expectedTimestamp))
     }
@@ -122,15 +115,7 @@ class CodableFeedStoreTests: XCTestCase {
         let expectedLocalFeed = uniqueImageFeed().local
         let expectedTimestamp = Date()
 
-        let exp = expectation(description: "Await Completion")
-
-        sut.insert(expectedLocalFeed, timestamp: expectedTimestamp) { insertionError in
-            XCTAssertNil(insertionError, "Unexpected Error")
-            exp.fulfill()
-        }
-
-        wait(for: [exp], timeout: 1)
-
+        insert((expectedLocalFeed, expectedTimestamp), to: sut)
         expect(sut, toRetrieveTwice: .found(feed: expectedLocalFeed, timestamp: expectedTimestamp))
     }
 
@@ -138,6 +123,17 @@ class CodableFeedStoreTests: XCTestCase {
 
     let testSpecificStoreURL: URL =
     FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: CodableFeedStoreTests.self)).store")
+
+    private func insert(_ cache: (feed: [LocalFeedImage], timestamp: Date), to sut: CodableFeedStore) {
+        let exp = expectation(description: "Await Completion")
+
+        sut.insert(cache.feed, timestamp: cache.timestamp) { insertionError in
+            XCTAssertNil(insertionError, "Unexpected Error")
+            exp.fulfill()
+        }
+
+        wait(for: [exp], timeout: 1)
+    }
 
     private func expect(
         _ sut: CodableFeedStore,
