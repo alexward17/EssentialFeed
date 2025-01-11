@@ -142,7 +142,7 @@ class CodableFeedStoreTests: XCTestCase {
             op2.fulfill()
         }
 
-        let op3 = expectation(description: "Operation 1")
+        let op3 = expectation(description: "Operation 3")
 
         sut.insert(uniqueImageFeed().local, timestamp: Date()) { _ in
             completedOperations.append(op3)
