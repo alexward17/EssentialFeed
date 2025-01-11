@@ -15,6 +15,8 @@ public enum HTTPStatusCode: Int {
 }
 
 public protocol HTTPClient {
+    /// The completion handler can be invoked on any thread.
+    /// Clients are responsible for dispatching to appropriate threads if needed.
     func get(
         from url: URL,
         completion: @escaping (HTTPClientResult) -> Void
