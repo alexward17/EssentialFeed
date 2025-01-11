@@ -3,7 +3,7 @@
 //  EssentialFeedTests
 //
 //  Created by Alex Ward on 2025-01-10.
-//
+// SIDE EFFECTS ARE THE ENEMY OF CONCURRENCY, the less side effects you have, the easier it is to make your app run concurrently
 
 import Foundation
 import XCTest
