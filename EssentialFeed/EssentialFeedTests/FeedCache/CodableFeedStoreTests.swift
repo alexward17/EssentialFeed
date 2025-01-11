@@ -124,6 +124,36 @@ class CodableFeedStoreTests: XCTestCase {
         XCTAssertNotNil(deletionError, "Expected deletion to fail")
     }
 
+    func test_storeSideEffects_runSerially() {
+        let sut = makeSUT()
+        var completedOperations = [XCTestExpectation]()
+
+        let op1 = expectation(description: "Operation 1")
+
+        sut.insert(uniqueImageFeed().local, timestamp: Date()) { _ in
+            completedOperations.append(op1)
+            op1.fulfill()
+        }
+
+        let op2 = expectation(description: "Operation 2")
+
+        sut.deleteCachedFeed { _ in
+            completedOperations.append(op2)
+            op2.fulfill()
+        }
+
+        let op3 = expectation(description: "Operation 1")
+
+        sut.insert(uniqueImageFeed().local, timestamp: Date()) { _ in
+            completedOperations.append(op3)
+            op3.fulfill()
+        }
+
+        waitForExpectations(timeout: 5)
+
+        XCTAssertEqual(completedOperations, [op1, op2, op3], "expected operations to run serially")
+    }
+
     // MARK: - Test Helpers
 
     private var testSpecificStoreURL: URL {
