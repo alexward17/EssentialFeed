@@ -22,17 +22,7 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
     func test_load_deliversNoItemsOnEmptyCache() {
         let sut = makeSUT()
 
-        let exp = expectation(description: "Wait for load completion")
-        sut.load { result in
-            guard case let .success(imageFeed) = result else {
-                XCTFail("Expected sucessful feed result")
-                return
-            }
-            XCTAssertEqual(imageFeed, [])
-            exp.fulfill()
-        }
-        
-        waitForExpectations(timeout: 1)
+        expect(sut, toLoad: [])
     }
 
     func test_load_deliversItemsSavedOnSeparateInstances() {
@@ -48,19 +38,7 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
 
         wait(for: [saveExp], timeout: 1)
 
-        let loadExp = expectation(description: "Wait for load completion")
-
-        loadSUT.load { loadResult in
-            guard case .success(let imageFeed) = loadResult else {
-                XCTFail("Expected sucessful feed result")
-                return
-            }
-
-            XCTAssertEqual(expectedFeed.models, imageFeed)
-            loadExp.fulfill()
-        }
-
-        wait(for: [loadExp], timeout: 1)
+        expect(loadSUT, toLoad: expectedFeed.models)
     }
 
     // MARK: Helpers
