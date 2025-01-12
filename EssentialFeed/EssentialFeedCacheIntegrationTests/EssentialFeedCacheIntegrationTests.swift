@@ -11,6 +11,14 @@ import EssentialFeed
 
 class EssentialFeedCacheIntegrationTests: XCTestCase {
 
+    override func setUp() {
+        setupEmptyStoreState()
+    }
+
+    override func tearDown() {
+        undoStoreSideEffects()
+    }
+
     func test_load_deliversNoItemsOnEmptyCache() {
         let sut = makeSUT()
 
@@ -27,7 +35,33 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
+    func test_load_deliversItemsSavedOnSeparateInstances() {
+        let saveSUT = makeSUT()
+        let loadSUT = makeSUT()
+        let expectedFeed = uniqueImageFeed()
 
+        let saveExp = expectation(description: "Wait for save completion")
+        saveSUT.save(expectedFeed.models) { error in
+            XCTAssertNil(error)
+            saveExp.fulfill()
+        }
+
+        wait(for: [saveExp], timeout: 1)
+
+        let loadExp = expectation(description: "Wait for load completion")
+
+        loadSUT.load { loadResult in
+            guard case .success(let imageFeed) = loadResult else {
+                XCTFail("Expected sucessful feed result")
+                return
+            }
+
+            XCTAssertEqual(expectedFeed.models, imageFeed)
+            loadExp.fulfill()
+        }
+
+        wait(for: [loadExp], timeout: 1)
+    }
 
     // MARK: Helpers
 
@@ -87,6 +121,15 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
 
     private func cachesDirectory() -> URL {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+    }
+
+    private func uniqueImage() -> FeedImage {
+        FeedImage(id: UUID(), url: XCTestCase.mockURL)
+    }
+
+    private func uniqueImageFeed() -> (models: [FeedImage], local: [LocalFeedImage]) {
+        let feed = [uniqueImage(), uniqueImage()]
+        return (feed, feed.toLocal())
     }
 
 }
