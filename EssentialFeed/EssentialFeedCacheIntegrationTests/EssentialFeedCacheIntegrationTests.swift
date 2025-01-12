@@ -28,17 +28,10 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
     func test_load_deliversItemsSavedOnSeparateInstances() {
         let saveSUT = makeSUT()
         let loadSUT = makeSUT()
-        let expectedFeed = uniqueImageFeed()
+        let expectedFeed = uniqueImageFeed().models
 
-        let saveExp = expectation(description: "Wait for save completion")
-        saveSUT.save(expectedFeed.models) { error in
-            XCTAssertNil(error)
-            saveExp.fulfill()
-        }
-
-        wait(for: [saveExp], timeout: 1)
-
-        expect(loadSUT, toLoad: expectedFeed.models)
+        save(expectedFeed, with: saveSUT)
+        expect(loadSUT, toLoad: expectedFeed)
     }
 
     func test_save_overridesItemsSavedOnASeparateInstance() {
@@ -46,26 +39,11 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
         let overrideSUT = makeSUT()
         let loadSUT = makeSUT()
 
-        let feedToOverride = uniqueImageFeed()
+        let feedToOverride = uniqueImageFeed().models
         let latesFeed = uniqueImageFeed().models + uniqueImageFeed().models
 
-        let saveExp = expectation(description: "Wait for save completion")
-        saveSUT.save(feedToOverride.models) { error in
-            XCTAssertNil(error, "Expected save to succeed")
-            saveExp.fulfill()
-        }
-
-        wait(for: [saveExp], timeout: 5)
-
-        let overrideExp = expectation(description: "Wait for override completion")
-
-        overrideSUT.save(latesFeed) { error in
-            XCTAssertNil(error, "Expected save to succeed")
-            overrideExp.fulfill()
-        }
-
-        wait(for: [overrideExp], timeout: 5)
-
+        save(feedToOverride, with: saveSUT)
+        save(latesFeed, with: overrideSUT)
         expect(loadSUT, toLoad: latesFeed)
     }
 
