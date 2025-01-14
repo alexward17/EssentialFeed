@@ -12,12 +12,6 @@ import EssentialFeed
 
 class FeedStoreSpy: FeedStore {
 
-    // MARK: - Types
-
-    typealias DeletionCompletion = (Error?) -> Void
-    typealias InsertionCompletion = (Error?) -> Void
-    typealias RetrievalCompletion = (RetrieveCachedFeedResult) -> Void
-
     // MARK: - Properties
 
     enum ReceivedMessage: Equatable {
@@ -64,12 +58,12 @@ class FeedStoreSpy: FeedStore {
     }
 
     func completeRetrievalWithEmptyCache(at index: Int = .zero) {
-        retrievalCompletions[index](.empty)
+        retrievalCompletions[index](.success((.empty)))
     }
 
     func completeRetrieval(with feed: [LocalFeedImage], timestamp: Date, at index: Int = .zero) {
         // make sure the timestamp is less than 7 days old
-        retrievalCompletions[index]((.found(feed: feed, timestamp: timestamp)))
+        retrievalCompletions[index](.success((.found(feed: feed, timestamp: timestamp))))
     }
 
     func retrieve(completion: @escaping RetrievalCompletion) {

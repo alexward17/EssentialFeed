@@ -72,7 +72,7 @@ public class CodableFeedStore: FeedStore {
 
             queue.async {
             guard let data = try? Data(contentsOf: storeURL) else {
-                completion(.empty)
+                completion(.success(.empty))
                 return
             }
 
@@ -81,7 +81,7 @@ public class CodableFeedStore: FeedStore {
                 let localImages = cache.feed.map({
                     $0.local
                 })
-                completion(.found(feed: localImages, timestamp: cache.timestamp))
+                completion(.success(.found(feed: localImages, timestamp: cache.timestamp)))
             } catch {
                 completion(.failure(error))
             }
