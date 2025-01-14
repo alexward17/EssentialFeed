@@ -9,8 +9,6 @@ public final class RemoteFeedLoader: FeedLoader {
         case invalidData
     }
 
-   public typealias Result = LoadFeedResult
-
     // MARK: - Properties
 
     private final let url: URL
@@ -25,7 +23,7 @@ public final class RemoteFeedLoader: FeedLoader {
 
     // MARK: - Loading Functions
 
-    public func load(completion: @escaping (Result) -> Void) {
+    public func load(completion: @escaping (FeedLoader.Result) -> Void) {
         client.get(from: url, completion: { [weak self] result in
             guard self != nil else { return }
             switch result {
@@ -37,7 +35,7 @@ public final class RemoteFeedLoader: FeedLoader {
         })
     }
 
-    private static func map(_ data: Data, _ response: HTTPURLResponse) -> Result {
+    private static func map(_ data: Data, _ response: HTTPURLResponse) -> FeedLoader.Result {
         do {
             let items = try FeedImageMapper.map(data, response)
             return .success(items.toModels())
