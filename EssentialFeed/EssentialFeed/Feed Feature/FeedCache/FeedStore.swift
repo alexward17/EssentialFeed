@@ -13,11 +13,11 @@ public protocol FeedStore {
 
     typealias CachedFeed = (feed: [LocalFeedImage], timestamp: Date)
 
-    typealias DeletionResult = Error
-    typealias DeletionCompletion = (DeletionResult?) -> Void
+    typealias DeletionResult = Result<Void, Error>
+    typealias DeletionCompletion = (DeletionResult) -> Void
 
-    typealias InsertionResult = Error
-    typealias InsertionCompletion = (InsertionResult?) -> Void
+    typealias InsertionResult = Result<Void, Error>
+    typealias InsertionCompletion = (InsertionResult) -> Void
 
     typealias RetrievalResult = Swift.Result<CachedFeed?, Error>
     typealias RetrievalCompletion = (RetrievalResult) -> Void

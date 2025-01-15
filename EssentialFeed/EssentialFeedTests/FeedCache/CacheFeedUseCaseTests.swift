@@ -98,9 +98,14 @@ class CacheFeedUseCase: XCTestCase {
                               line: UInt = #line) {
         let exp = expectation(description: "Completion")
 
-        var receievedError: LocalFeedLoader.SaveResult?
-        sut.save(uniqueImageFeed().models) { error in
-            receievedError = error
+        var receievedError: Error?
+        sut.save(uniqueImageFeed().models) { result in
+            switch result {
+            case .success():
+                break
+            case let .failure(error):
+                receievedError = error
+            }
             exp.fulfill()
         }
 
