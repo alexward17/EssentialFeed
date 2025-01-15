@@ -11,26 +11,26 @@ class EssentialFeedAPIEndToEndTests: XCTestCase {
 
     func test_endToEndTestServerGETFeedResult_matchesFixedTestAccountData() {
         switch getFeedResult() {
-        case .success(let feedITems):
-            XCTAssertEqual(feedITems.count, 8)
-            XCTAssertEqual(EXPECTED_FEED_ITEM_IDS, feedITems.map({ $0.id.uuidString }))
-            XCTAssertEqual(EXPECTED_FEED_ITEM_DESCRIPTIONS, feedITems.map({ $0.description }))
-            XCTAssertEqual(EXPECTED_FEED_ITEM_LOCATIONS, feedITems.map({ $0.location }))
-            XCTAssertEqual(EXPECTED_FEED_ITEM_IMAGE_URLS, feedITems.map({ $0.imageURL.absoluteString }))
+        case .success(let imageFeed):
+            XCTAssertEqual(imageFeed.count, 8)
+            XCTAssertEqual(EXPECTED_FEED_IMAGE_IDS, imageFeed.map({ $0.id.uuidString }))
+            XCTAssertEqual(EXPECTED_FEED_IMAGE_DESCRIPTIONS, imageFeed.map({ $0.description }))
+            XCTAssertEqual(EXPECTED_FEED_IMAGE_LOCATIONS, imageFeed.map({ $0.location }))
+            XCTAssertEqual(EXPECTED_FEED_IMAGE_IMAGE_URLS, imageFeed.map({ $0.url.absoluteString }))
         default: XCTFail("Should have succeeded")
         }
     }
 
 // MARK: - Helpers
 
-    private func getFeedResult(file: StaticString = #filePath, line: UInt = #line) -> LoadFeedResult? {
+    private func getFeedResult(file: StaticString = #filePath, line: UInt = #line) -> FeedLoader.Result? {
         let client = URLSessionHTTPClient()
         let url = URL(string: "https://essentialdeveloper.com/feed-case-study/test-api/feed")!
         let loader = RemoteFeedLoader(url: url, client: client)
         trackForMemoryLeaks(client, file: file, line: line)
         trackForMemoryLeaks(loader, file: file, line: line)
         let exp = expectation(description: "Wait for load completion")
-        var receivedResult: LoadFeedResult?
+        var receivedResult: FeedLoader.Result?
         loader.load(completion: { result in
             receivedResult = result
             exp.fulfill()
@@ -41,23 +41,23 @@ class EssentialFeedAPIEndToEndTests: XCTestCase {
 
 }
 
-var EXPECTED_FEED_ITEM_IDS: [String] {
-    SERVER_ITEMS.compactMap({ $0["id"] })
+var EXPECTED_FEED_IMAGE_IDS: [String] {
+    SERVER_IMAGES.compactMap({ $0["id"] })
 }
 
-var EXPECTED_FEED_ITEM_DESCRIPTIONS: [String?] {
-    SERVER_ITEMS.map({ $0["description"] })
+var EXPECTED_FEED_IMAGE_DESCRIPTIONS: [String?] {
+    SERVER_IMAGES.map({ $0["description"] })
 }
 
-var EXPECTED_FEED_ITEM_LOCATIONS: [String?] {
-    SERVER_ITEMS.map({ $0["location"] })
+var EXPECTED_FEED_IMAGE_LOCATIONS: [String?] {
+    SERVER_IMAGES.map({ $0["location"] })
 }
 
-var EXPECTED_FEED_ITEM_IMAGE_URLS: [String] {
-    SERVER_ITEMS.compactMap({ $0["image"] })
+var EXPECTED_FEED_IMAGE_IMAGE_URLS: [String] {
+    SERVER_IMAGES.compactMap({ $0["image"] })
 }
 
-let SERVER_ITEMS: [[String: String]] = [
+let SERVER_IMAGES: [[String: String]] = [
     [
         "id": "73A7F70C-75DA-4C2E-B5A3-EED40DC53AA6",
         "description": "Description 1",
