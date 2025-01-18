@@ -1,9 +1,15 @@
 import UIKit
 
+struct FeedImageViewModel {
+    let description: String?
+    let location: String?
+    let imageName: String
+}
+
 final class FeedViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        10
+        FeedImageViewModel.prototypeFeed.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
