@@ -6,8 +6,6 @@
 //
 
 import XCTest
-@testable import EssentialFeed
-@testable import EssentialFeediOS
 
 final class EssentialFeediOSTests: XCTestCase {
 
