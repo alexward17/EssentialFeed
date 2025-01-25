@@ -89,23 +89,13 @@ private extension FeedViewController {
 
 final class FeedViewControllerTests: XCTestCase {
 
-    func test_init_doesNotLoadFeed() {
-        let (_, loaderSpy) = makeSUT()
+    func test_init_loadFeedActions_requestFeedFromLoader() {
+        let (sut, loaderSpy) = makeSUT()
 
         XCTAssertEqual(loaderSpy.loadCallCount, .zero)
-    }
-
-    func test_viewDidLoad_loadsFeed() {
-        let (sut, loaderSpy) = makeSUT()
 
         sut.loadViewIfNeeded()
-
         XCTAssertEqual(loaderSpy.loadCallCount, 1)
-    }
-
-    func test_userInitiatedFeedReload_loadsFeed() {
-        let (sut, loaderSpy) = makeSUT()
-        sut.loadViewIfNeeded()
 
         sut.simulateUserInitiatedFeedReload()
         XCTAssertEqual(loaderSpy.loadCallCount, 2)
