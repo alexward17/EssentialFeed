@@ -31,3 +31,13 @@ final class FeedImageCell: UITableViewCell {
         }
     }
 }
+
+extension FeedImageCell {
+    func configuew(with model: FeedImageViewModel) {
+        descriptionLabel.text = model.description
+        locationLabel.text = model.location
+        descriptionLabel.isHidden = model.description == nil
+        locationLabel.isHidden = model.location == nil
+        fadeInFeedImage(UIImage(named: model.imageName))
+    }
+}
