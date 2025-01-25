@@ -100,6 +100,7 @@
 		C76887A22D34493D0070EE1C /* FeedStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FeedStore.xcdatamodel; sourceTree = "<group>"; };
 		C7741E312D15CE0E00917273 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		C7741E332D15CE9100917273 /* FeedItemMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemMapper.swift; sourceTree = "<group>"; };
+		C7A55FD72D4574E600F3FC0D /* EssentialFeedPrototype.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EssentialFeedPrototype.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7E607EE2D1E518A00E60739 /* EssentialFeed.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = EssentialFeed.xctestplan; sourceTree = "<group>"; };
 		C7EB53332D345A1D00DE9432 /* EssentialFeedCacheIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeedCacheIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7EB533D2D345D6100DE9432 /* CoreDataFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFeedStore.swift; sourceTree = "<group>"; };
@@ -109,7 +110,18 @@
 		C7EBACFC2D1B474600662611 /* EssentialFeedAPIEndToEndTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeedAPIEndToEndTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C7A55FEA2D4574E800F3FC0D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C7A55FD62D4574E600F3FC0D /* EssentialFeedPrototype */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		C7A55FD82D4574E600F3FC0D /* EssentialFeedPrototype */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (C7A55FEA2D4574E800F3FC0D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = EssentialFeedPrototype; sourceTree = "<group>"; };
 		C7EB53342D345A1D00DE9432 /* EssentialFeedCacheIntegrationTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = EssentialFeedCacheIntegrationTests; sourceTree = "<group>"; };
 		C7EBACFD2D1B474600662611 /* EssentialFeedAPIEndToEndTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = EssentialFeedAPIEndToEndTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -127,6 +139,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				080EDEFB21B6DA7E00813479 /* EssentialFeed.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7A55FD42D4574E600F3FC0D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,6 +176,7 @@
 				080EDEFE21B6DA7E00813479 /* EssentialFeedTests */,
 				C7EBACFD2D1B474600662611 /* EssentialFeedAPIEndToEndTests */,
 				C7EB53342D345A1D00DE9432 /* EssentialFeedCacheIntegrationTests */,
+				C7A55FD82D4574E600F3FC0D /* EssentialFeedPrototype */,
 				080EDEF221B6DA7E00813479 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -168,6 +188,7 @@
 				080EDEFA21B6DA7E00813479 /* EssentialFeedTests.xctest */,
 				C7EBACFC2D1B474600662611 /* EssentialFeedAPIEndToEndTests.xctest */,
 				C7EB53332D345A1D00DE9432 /* EssentialFeedCacheIntegrationTests.xctest */,
+				C7A55FD72D4574E600F3FC0D /* EssentialFeedPrototype.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -323,6 +344,28 @@
 			productReference = 080EDEFA21B6DA7E00813479 /* EssentialFeedTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		C7A55FD62D4574E600F3FC0D /* EssentialFeedPrototype */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7A55FEB2D4574E800F3FC0D /* Build configuration list for PBXNativeTarget "EssentialFeedPrototype" */;
+			buildPhases = (
+				C7A55FD32D4574E600F3FC0D /* Sources */,
+				C7A55FD42D4574E600F3FC0D /* Frameworks */,
+				C7A55FD52D4574E600F3FC0D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C7A55FD82D4574E600F3FC0D /* EssentialFeedPrototype */,
+			);
+			name = EssentialFeedPrototype;
+			packageProductDependencies = (
+			);
+			productName = EssentialFeedPrototype;
+			productReference = C7A55FD72D4574E600F3FC0D /* EssentialFeedPrototype.app */;
+			productType = "com.apple.product-type.application";
+		};
 		C7EB53322D345A1D00DE9432 /* EssentialFeedCacheIntegrationTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C7EB533A2D345A1D00DE9432 /* Build configuration list for PBXNativeTarget "EssentialFeedCacheIntegrationTests" */;
@@ -388,6 +431,9 @@
 						CreatedOnToolsVersion = 10.1;
 						LastSwiftMigration = 1600;
 					};
+					C7A55FD62D4574E600F3FC0D = {
+						CreatedOnToolsVersion = 16.0;
+					};
 					C7EB53322D345A1D00DE9432 = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -413,6 +459,7 @@
 				080EDEF921B6DA7E00813479 /* EssentialFeedTests */,
 				C7EBACFB2D1B474600662611 /* EssentialFeedAPIEndToEndTests */,
 				C7EB53322D345A1D00DE9432 /* EssentialFeedCacheIntegrationTests */,
+				C7A55FD62D4574E600F3FC0D /* EssentialFeedPrototype */,
 			);
 		};
 /* End PBXProject section */
@@ -426,6 +473,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		080EDEF821B6DA7E00813479 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7A55FD52D4574E600F3FC0D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -490,6 +544,13 @@
 				C7EBACF52D19BEDA00662611 /* XCTTestCase+Helpers.swift in Sources */,
 				C76887952D3321EB0070EE1C /* XCTest+FeedStoreSpecs.swift in Sources */,
 				C7EB532E2D3456C600DE9432 /* FeedStore.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7A55FD32D4574E600F3FC0D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -774,6 +835,74 @@
 			};
 			name = Release;
 		};
+		C7A55FE82D4574E800F3FC0D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B3VTTF367S;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EssentialFeedPrototype/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Alex-ward-inc..EssentialFeedPrototype";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C7A55FE92D4574E800F3FC0D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B3VTTF367S;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EssentialFeedPrototype/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Alex-ward-inc..EssentialFeedPrototype";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		C7EB533B2D345A1D00DE9432 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -876,6 +1005,15 @@
 			buildConfigurations = (
 				080EDF0921B6DA7E00813479 /* Debug */,
 				080EDF0A21B6DA7E00813479 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C7A55FEB2D4574E800F3FC0D /* Build configuration list for PBXNativeTarget "EssentialFeedPrototype" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7A55FE82D4574E800F3FC0D /* Debug */,
+				C7A55FE92D4574E800F3FC0D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
