@@ -53,6 +53,11 @@ class FeedViewController: UITableViewController {
 }
 
 private extension FeedViewController {
+
+    var isShowingLoadingIndicator: Bool {
+        refreshControl?.isRefreshing ?? false
+    }
+
     func simulateUserInitiatedFeedReload() {
         refreshControl?.simulatePullToRefresh()
     }
