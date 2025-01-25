@@ -45,6 +45,7 @@ class FeedViewController: UITableViewController {
     }
 
     @objc private func load() {
+        refreshControl?.beginRefreshing()
         loader.load { [weak self] _ in
             self?.refreshControl?.endRefreshing()
         }
@@ -104,35 +105,20 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(loaderSpy.loadCallCount, 3)
     }
 
-    func test_viewDidLoad_showLoadingIndicator() {
+    func test_viewDidLoad_loadingIndicator_isVisibleWhileLoadingFeed() {
         let (sut, loader) = makeSUT()
 
         sut.simulateAppearance()
-        XCTAssertEqual(sut.isShowingLoadingIndicator, true)
+        XCTAssertTrue(sut.isShowingLoadingIndicator)
 
-        sut.refreshControl?.endRefreshing()
-        sut.simulateAppearance()
-        XCTAssertEqual(sut.isShowingLoadingIndicator, false)
+        loader.completeFeedLoading(at: .zero)
+        XCTAssertFalse(sut.isShowingLoadingIndicator)
 
-        loader.completeFeedLoading()
-        XCTAssertEqual(sut.isShowingLoadingIndicator, false)
-    }
-
-    func test_userInitiatedFeedReloadShowLoadingIndicator() {
-        let (sut, _) = makeSUT()
-
-        sut.simulateAppearance()
         sut.simulateUserInitiatedFeedReload()
-        XCTAssertEqual(sut.isShowingLoadingIndicator, true)
-    }
+        XCTAssertTrue(sut.isShowingLoadingIndicator)
 
-    func test_userInitiatedFeedReloadhidesIndicatorOnLoaderCompletion() {
-        let (sut, loader) = makeSUT()
-
-        sut.simulateAppearance()
-        sut.simulateUserInitiatedFeedReload()
-        loader.completeFeedLoading()
-        XCTAssertEqual(sut.isShowingLoadingIndicator, false)
+        loader.completeFeedLoading(at: 1)
+        XCTAssertFalse(sut.isShowingLoadingIndicator)
     }
 
     // MARK: - Helpers
@@ -163,8 +149,8 @@ final class FeedViewControllerTests: XCTestCase {
             completions.append(completion)
         }
 
-        func completeFeedLoading() {
-            completions[0](.success([]))
+        func completeFeedLoading(at index: Int) {
+            completions[index](.success([]))
         }
 
     }
