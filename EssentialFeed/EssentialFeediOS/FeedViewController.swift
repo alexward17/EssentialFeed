@@ -1,18 +1,24 @@
 import UIKit
 
+public protocol FeedImageDataLoader {
+    func loadImageData(from url: URL)
+}
+
 public class FeedViewController: UITableViewController {
 
     // MARK: - Properties
 
-    private let loader: FeedLoader
+    private let feedLoader: FeedLoader
+    private let imageLoader: FeedImageDataLoader?
     private var tableModel = [FeedImage]()
 
     private var onViewAppearing: ((FeedViewController) -> Void)?
 
     // MARK: - Initializers
 
-    public init(loader: FeedLoader) {
-        self.loader = loader
+    public init(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader?) {
+        self.feedLoader = feedLoader
+        self.imageLoader = imageLoader
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -47,7 +53,7 @@ public class FeedViewController: UITableViewController {
 
     @objc private func load() {
         refreshControl?.beginRefreshing()
-        loader.load { [weak self] result in
+        feedLoader.load { [weak self] result in
             self?.refreshControl?.endRefreshing()
 
             guard let feed = try? result.get() else { return }
@@ -68,6 +74,7 @@ extension FeedViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: FeedImageCell.self), for: indexPath) as? FeedImageCell ?? FeedImageCell()
 
         cell.configuew(with: tableModel[indexPath.row])
+        imageLoader?.loadImageData(from: tableModel[indexPath.row].url)
 
         return cell
     }
