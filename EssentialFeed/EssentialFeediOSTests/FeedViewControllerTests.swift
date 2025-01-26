@@ -86,6 +86,23 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url])
     }
 
+    func test_feedImageView_cancelsImageLoadingWhennotVisibleAnymore() {
+        let image0 = makeImage(url: URL(string: "http://url-0.com"))
+        let image1 = makeImage(url: URL(string: "http://url-1.com"))
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(with: [image0, image1])
+
+        XCTAssertEqual(loader.loadedImageURLs, [])
+
+        sut.simulateImageNotVisible(at: .zero)
+        XCTAssertEqual(loader.cancelledImageURLs, [image0.url])
+
+        sut.simulateImageNotVisible(at: 1)
+        XCTAssertEqual(loader.cancelledImageURLs, [image0.url, image1.url])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) ->
@@ -145,11 +162,16 @@ final class FeedViewControllerTests: XCTestCase {
         // MARK: - Feed Image Data Loader Properties
 
         final var loadedImageURLs = [URL]()
+        final var cancelledImageURLs = [URL]()
 
         // MARK: - Feed Image Data LoaderFunctions
 
         func loadImageData(from url: URL) {
             loadedImageURLs.append(url)
+        }
+
+        func cancelImageLoading(for url: URL) {
+            cancelledImageURLs.append(url)
         }
 
     }
@@ -187,9 +209,7 @@ extension FeedViewController {
 
     // MARK: - Properties
 
-    var feedImageSection: Int {
-        .zero
-    }
+    var feedImageSection: Int { .zero }
 
     var isShowingLoadingIndicator: Bool {
         refreshControl?.isRefreshing ?? false
@@ -226,15 +246,22 @@ extension FeedViewController {
         tableView.numberOfRows(inSection: feedImageSection)
     }
 
+    @discardableResult
     func feedImageView(at row: Int) -> UITableViewCell? {
         let dataSource = tableView.dataSource
         let idxPath = IndexPath(row: row, section: feedImageSection)
         return dataSource?.tableView(tableView, cellForRowAt: idxPath)
-
     }
 
-    func simulateImageVisible(at row: Int) {
-        _ = feedImageView(at: row)
+    func simulateImageVisible(at row: Int) -> UITableViewCell? {
+        feedImageView(at: row)
+    }
+
+    func simulateImageNotVisible(at row: Int) {
+        let view = simulateImageVisible(at: row)
+        let delegate = tableView.delegate
+        let indexPath = IndexPath(row: row, section: feedImageSection)
+        delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: indexPath)
     }
 
 }

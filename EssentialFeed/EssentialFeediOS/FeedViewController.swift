@@ -2,6 +2,7 @@ import UIKit
 
 public protocol FeedImageDataLoader {
     func loadImageData(from url: URL)
+    func cancelImageLoading(for url: URL)
 }
 
 public class FeedViewController: UITableViewController {
@@ -77,6 +78,10 @@ extension FeedViewController {
         imageLoader?.loadImageData(from: tableModel[indexPath.row].url)
 
         return cell
+    }
+
+    public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        imageLoader?.cancelImageLoading(for: tableModel[indexPath.row].url)
     }
 
 }
