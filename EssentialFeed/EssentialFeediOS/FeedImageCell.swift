@@ -13,6 +13,7 @@ public class FeedImageCell: UITableViewCell {
     public let descriptionLabel = UILabel()
     public let feedImageContainer = UIView()
     public var feedImageView = UIImageView()
+    public var feedImageRetryButton = UIButton()
 
     func configuew(with model: FeedImage) {
         descriptionLabel.text = model.description

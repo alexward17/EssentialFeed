@@ -80,12 +80,14 @@ extension FeedViewController {
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: FeedImageCell.self), for: indexPath) as? FeedImageCell ?? FeedImageCell()
         cell.feedImageView.image = nil
+        cell.feedImageRetryButton.isHidden = true
         cell.feedImageContainer.startShimmering()
 
         cell.configuew(with: tableModel[indexPath.row])
         guard let task = imageLoader?.loadImageData(from: tableModel[indexPath.row].url, completion: { [weak cell] result in
             let data = try? result.get()
             cell?.feedImageView.image = data.map(UIImage.init) ?? nil
+            cell?.feedImageRetryButton.isHidden = data != nil
             cell?.feedImageContainer.stopShimmering()
         }) else { return cell }
         loaderTasks[indexPath] = task
