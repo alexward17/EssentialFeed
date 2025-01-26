@@ -184,6 +184,28 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(view?.isShowingRetryAction, true)
     }
 
+    func test_feedImageViewRetryButton_retriesImageLoad() {
+        let image0 = makeImage(url: URL(string: "http://url-0.com"))
+        let image1 = makeImage(url: URL(string: "http://url-1.com"))
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(with: [image0, image1])
+
+        let view0 = sut.simulateImageVisible(at: .zero)
+        let view1 = sut.simulateImageVisible(at: 1)
+
+        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url])
+
+        loader.completeImageLoadingWithError(at: 0)
+        loader.completeImageLoadingWithError(at: 1)
+
+        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url])
+
+        view0?.simulateRetryAction()
+        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url, image0.url])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) ->
@@ -277,18 +299,6 @@ final class FeedViewControllerTests: XCTestCase {
             imageRequests[index].completion(.failure(XCTestCase.anyError))
         }
 
-    }
-
-}
-
-public extension UIRefreshControl {
-
-    func simulatePullToRefresh() {
-        allTargets.forEach { target in
-            actions(forTarget: target, forControlEvent: .valueChanged)?.forEach({
-                (target as NSObject).perform(Selector($0))
-            })
-        }
     }
 
 }
@@ -392,6 +402,22 @@ extension FeedImageCell {
     var isShowingRetryAction: Bool {
         !feedImageRetryButton.isHidden
     }
+
+    func simulateRetryAction() {
+        feedImageRetryButton.simulateTap()
+    }
+}
+
+public extension UIRefreshControl {
+
+    func simulatePullToRefresh() {
+        allTargets.forEach { target in
+            actions(forTarget: target, forControlEvent: .valueChanged)?.forEach({
+                (target as NSObject).perform(Selector($0))
+            })
+        }
+    }
+
 }
 
 private extension UIImage {
@@ -407,4 +433,15 @@ private extension UIImage {
         }
     }
 
+}
+
+private extension UIButton {
+
+    func simulateTap() {
+        allTargets.forEach { target in
+            actions(forTarget: target, forControlEvent: .touchUpInside)?.forEach({
+                (target as NSObject).perform(Selector($0))
+            })
+        }
+    }
 }

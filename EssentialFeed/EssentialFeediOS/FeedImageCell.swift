@@ -13,7 +13,13 @@ public class FeedImageCell: UITableViewCell {
     public let descriptionLabel = UILabel()
     public let feedImageContainer = UIView()
     public var feedImageView = UIImageView()
-    public var feedImageRetryButton = UIButton()
+    public private(set) lazy var feedImageRetryButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(retryActionButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
+    var onRetry: (() -> Void)?
 
     func configuew(with model: FeedImage) {
         descriptionLabel.text = model.description
@@ -21,5 +27,9 @@ public class FeedImageCell: UITableViewCell {
         descriptionLabel.isHidden = model.description == nil
         locationLabel.isHidden = model.location == nil
       //  fadeInFeedImage(UIImage(named: model.imageName))
+    }
+
+    @objc private func retryActionButtonTapped() {
+        onRetry?()
     }
 }

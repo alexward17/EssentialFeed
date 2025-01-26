@@ -84,13 +84,19 @@ extension FeedViewController {
         cell.feedImageContainer.startShimmering()
 
         cell.configuew(with: tableModel[indexPath.row])
-        guard let task = imageLoader?.loadImageData(from: tableModel[indexPath.row].url, completion: { [weak cell] result in
-            let data = try? result.get()
-            cell?.feedImageView.image = data.map(UIImage.init) ?? nil
-            cell?.feedImageRetryButton.isHidden = data != nil && cell?.feedImageView.image != nil
-            cell?.feedImageContainer.stopShimmering()
-        }) else { return cell }
-        loaderTasks[indexPath] = task
+        let loadImage = { [weak self, weak cell] in
+            guard let self else { return }
+            loaderTasks[indexPath] = imageLoader?.loadImageData(from: tableModel[indexPath.row].url, completion: { [weak cell] result in
+                let data = try? result.get()
+                let image = data.map(UIImage.init) ?? nil
+                cell?.feedImageView.image = image
+                cell?.feedImageRetryButton.isHidden = cell?.feedImageView.image != nil
+                cell?.feedImageContainer.stopShimmering()
+            })
+        }
+
+        cell.onRetry = loadImage
+        loadImage()
 
         return cell
     }
