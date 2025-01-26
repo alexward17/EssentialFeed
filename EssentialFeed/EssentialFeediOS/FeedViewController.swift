@@ -87,7 +87,7 @@ extension FeedViewController {
         guard let task = imageLoader?.loadImageData(from: tableModel[indexPath.row].url, completion: { [weak cell] result in
             let data = try? result.get()
             cell?.feedImageView.image = data.map(UIImage.init) ?? nil
-            cell?.feedImageRetryButton.isHidden = data != nil
+            cell?.feedImageRetryButton.isHidden = data != nil && cell?.feedImageView.image != nil
             cell?.feedImageContainer.stopShimmering()
         }) else { return cell }
         loaderTasks[indexPath] = task
