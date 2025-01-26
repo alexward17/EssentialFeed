@@ -123,6 +123,30 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(view1?.isShowingLoadingIndicator, false)
     }
 
+    func test_feedImageView_rendersImageLoadedFromURL() {
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(with: [makeImage(), makeImage()])
+
+        let view0 = sut.simulateImageVisible(at: .zero)
+        let view1 = sut.simulateImageVisible(at: 1)
+
+        XCTAssertEqual(view0?.renderedImage, .none)
+        XCTAssertEqual(view1?.renderedImage, .none)
+
+        let imageData0 = UIImage.make(withColor: .red).pngData()!
+
+        loader.completeImageLoading(with: imageData0, at: .zero)
+        XCTAssertEqual(view0?.renderedImage, imageData0)
+        XCTAssertEqual(view1?.renderedImage, .none)
+
+        let imageData1 = UIImage.make(withColor: .blue).pngData()!
+
+        loader.completeImageLoading(with: imageData1, at: 1)
+        XCTAssertEqual(view1?.renderedImage, imageData1)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) ->
@@ -323,4 +347,23 @@ extension FeedImageCell {
     var isShowingLoadingIndicator: Bool {
         feedImageContainer.isShimmering
     }
+
+    var renderedImage: Data? {
+        feedImageView.image?.pngData()
+    }
+}
+
+private extension UIImage {
+
+    static func make(withColor color: UIColor) -> UIImage {
+        let rect = CGRect(x: .zero, y: .zero, width: 1, height: 1)
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+
+        return UIGraphicsImageRenderer(size: rect.size, format: format).image { rendererContext in
+            color.setFill()
+            rendererContext.fill(rect)
+        }
+    }
+
 }
