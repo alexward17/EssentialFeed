@@ -193,7 +193,6 @@ final class FeedViewControllerTests: XCTestCase {
         loader.completeFeedLoading(with: [image0, image1])
 
         let view0 = sut.simulateImageVisible(at: .zero)
-        let view1 = sut.simulateImageVisible(at: 1)
 
         XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url])
 
