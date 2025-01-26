@@ -103,13 +103,23 @@ extension FeedViewController {
     }
 
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        loaderTasks[indexPath]?.cancel()
+        cancelTask(forRowAt: indexPath)
     }
 
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach {
-            _ = imageLoader?.loadImageData(from: tableModel[$0.row].url, completion: {_ in})
+            loaderTasks[$0] = imageLoader?.loadImageData(from: tableModel[$0.row].url, completion: {_ in})
         }
     }
 
+    public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+        indexPaths.forEach {
+            cancelTask(forRowAt: $0)
+        }
+    }
+
+    private func cancelTask(forRowAt indexPath: IndexPath) {
+        loaderTasks[indexPath]?.cancel()
+        loaderTasks[indexPath] = nil
+    }
 }
