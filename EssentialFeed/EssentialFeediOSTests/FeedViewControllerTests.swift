@@ -56,6 +56,19 @@ final class FeedViewControllerTests: XCTestCase {
         assertThat(sut, isRendering: [image0, image1, image2, image3])
     }
 
+    func test_loadFeedCompletion_doesNotAlterCurrentrenderingStateOnError() {
+        let image0 = makeImage(description: "a description", location: "a location")
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(with: [image0])
+
+        sut.simulateUserInitiatedFeedReload()
+        loader.completeFeedLoadingWithError()
+
+        assertThat(sut, isRendering: [image0])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) ->
@@ -106,6 +119,10 @@ final class FeedViewControllerTests: XCTestCase {
 
         func completeFeedLoading(with feed: [FeedImage] = [], at index: Int = .zero) {
             completions[index](.success(feed))
+        }
+
+        func completeFeedLoadingWithError(at index: Int = .zero) {
+            completions[index](.failure(XCTestCase.anyError))
         }
 
     }

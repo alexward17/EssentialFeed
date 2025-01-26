@@ -52,7 +52,7 @@ public class FeedViewController: UITableViewController {
             case .success(let feed):
                 self?.tableModel = feed
                 self?.tableView.reloadData()
-            case .failure(_):
+            case .failure(let error):
                 break
             }
             self?.refreshControl?.endRefreshing()
