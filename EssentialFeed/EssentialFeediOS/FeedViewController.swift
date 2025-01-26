@@ -5,7 +5,9 @@ public protocol FeedImageDataLoaderTask {
 }
 
 public protocol FeedImageDataLoader {
-    func loadImageData(from url: URL) -> FeedImageDataLoaderTask
+    typealias Result = Swift.Result<Data, Error>
+
+    func loadImageData(from url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataLoaderTask
 }
 
 public class FeedViewController: UITableViewController {
@@ -78,8 +80,11 @@ extension FeedViewController {
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: FeedImageCell.self), for: indexPath) as? FeedImageCell ?? FeedImageCell()
 
+        cell.feedImageContainer.startShimmering()
         cell.configuew(with: tableModel[indexPath.row])
-        guard let task = imageLoader?.loadImageData(from: tableModel[indexPath.row].url) else { return cell }
+        guard let task = imageLoader?.loadImageData(from: tableModel[indexPath.row].url, completion: { [weak cell] _ in
+            cell?.feedImageContainer.stopShimmering()
+        }) else { return cell }
         loaderTasks[indexPath] = task
 
         return cell
