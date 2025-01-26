@@ -2,9 +2,10 @@ import UIKit
 
 public class FeedViewController: UITableViewController {
 
-    // MARK: - Properties//
+    // MARK: - Properties
 
     private let loader: FeedLoader
+    private var tableModel = [FeedImage]()
 
     private var onViewAppearing: ((FeedViewController) -> Void)?
 
@@ -23,6 +24,7 @@ public class FeedViewController: UITableViewController {
 
     public override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.register(FeedImageCell.self, forCellReuseIdentifier: String(describing: FeedImageCell.self))
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(load), for: .valueChanged)
         onViewAppearing = { vc in
@@ -45,17 +47,32 @@ public class FeedViewController: UITableViewController {
 
     @objc private func load() {
         refreshControl?.beginRefreshing()
-        loader.load { [weak self] _ in
+        loader.load { [weak self] result in
+            switch result {
+            case .success(let feed):
+                self?.tableModel = feed
+                self?.tableView.reloadData()
+            case .failure(_):
+                break
+            }
             self?.refreshControl?.endRefreshing()
         }
     }
 
 }
 
-public extension FeedViewController {
+extension FeedViewController {
 
-    var isShowingLoadingIndicator: Bool {
-        refreshControl?.isRefreshing ?? false
+    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        tableModel.count
+    }
+
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: FeedImageCell.self), for: indexPath) as? FeedImageCell ?? FeedImageCell()
+
+        cell.configuew(with: tableModel[indexPath.row])
+
+        return cell
     }
 
 }
