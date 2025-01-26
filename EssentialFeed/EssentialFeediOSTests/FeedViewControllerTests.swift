@@ -185,24 +185,26 @@ final class FeedViewControllerTests: XCTestCase {
     }
 
     func test_feedImageViewRetryButton_retriesImageLoad() {
-        let image0 = makeImage(url: URL(string: "http://url-0.com"))
-        let image1 = makeImage(url: URL(string: "http://url-1.com"))
+        let image0 = makeImage(url: URL(string: "http://url-0.com")!)
+        let image1 = makeImage(url: URL(string: "http://url-1.com")!)
         let (sut, loader) = makeSUT()
 
         sut.loadViewIfNeeded()
         loader.completeFeedLoading(with: [image0, image1])
 
-        let view0 = sut.simulateImageVisible(at: .zero)
-
-        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url])
+        let view0 = sut.simulateImageVisible(at: 0)
+        let view1 = sut.simulateImageVisible(at: 1)
+        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url], "Expected two image URL request for the two visible views")
 
         loader.completeImageLoadingWithError(at: 0)
         loader.completeImageLoadingWithError(at: 1)
-
-        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url])
+        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url], "Expected only two image URL requests before retry action")
 
         view0?.simulateRetryAction()
-        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url, image0.url])
+        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url, image0.url], "Expected third imageURL request after first view retry action")
+
+        view1?.simulateRetryAction()
+        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url, image0.url, image1.url], "Expected fourth imageURL request after second view retry action")
     }
 
     func test_feedImageView_preloadsImageURLWhenNearVisible() {
