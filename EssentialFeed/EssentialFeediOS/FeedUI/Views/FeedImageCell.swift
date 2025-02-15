@@ -21,12 +21,11 @@ public class FeedImageCell: UITableViewCell {
 
     var onRetry: (() -> Void)?
 
-    func configuew(with model: FeedImage) {
-        descriptionLabel.text = model.description
-        locationLabel.text = model.location
-        descriptionLabel.isHidden = model.description == nil
-        locationLabel.isHidden = model.location == nil
-      //  fadeInFeedImage(UIImage(named: model.imageName))
+    func configure(with model: FeedImage?) {
+        descriptionLabel.text = model?.description
+        locationLabel.text = model?.location
+        descriptionLabel.isHidden = model?.description == nil
+        locationLabel.isHidden = model?.location == nil
     }
 
     @objc private func retryActionButtonTapped() {
