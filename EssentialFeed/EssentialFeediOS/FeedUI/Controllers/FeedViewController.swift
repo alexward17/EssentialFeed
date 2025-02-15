@@ -1,30 +1,22 @@
 import UIKit
 
-public protocol FeedImageDataLoaderTask {
-    func cancel()
-}
-
-public protocol FeedImageDataLoader {
-    typealias Result = Swift.Result<Data, Error>
-
-    func loadImageData(from url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataLoaderTask
-}
-
 public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
 
     // MARK: - Properties
 
-    private let feedLoader: FeedLoader
+    public var refreshController: FeedRefreshViewController?
     private var loaderTasks = [IndexPath : FeedImageDataLoaderTask]()
     private let imageLoader: FeedImageDataLoader?
-    private var tableModel = [FeedImage]()
+    private var tableModel = [FeedImage]() {
+        didSet { tableView.reloadData() }
+    }
 
     private var onViewAppearing: ((FeedViewController) -> Void)?
 
     // MARK: - Initializers
 
     public init(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader?) {
-        self.feedLoader = feedLoader
+        self.refreshController = FeedRefreshViewController(feedLoader: feedLoader)
         self.imageLoader = imageLoader
         super.init(nibName: nil, bundle: nil)
     }
@@ -39,13 +31,17 @@ public class FeedViewController: UITableViewController, UITableViewDataSourcePre
         super.viewDidLoad()
         tableView.register(FeedImageCell.self, forCellReuseIdentifier: String(describing: FeedImageCell.self))
         tableView.prefetchDataSource = self
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(load), for: .valueChanged)
+        refreshControl = refreshController?.view
+
+        refreshController?.onRefresh = { [weak self] feed in
+            self?.tableModel = feed
+        }
+
         onViewAppearing = { vc in
             vc.refresh()
             vc.onViewAppearing = nil
         }
-        load()
+        refreshController?.refresh()
     }
 
     public override func viewIsAppearing(_ animated: Bool) {
@@ -57,17 +53,6 @@ public class FeedViewController: UITableViewController, UITableViewDataSourcePre
 
     @objc private func refresh() {
         refreshControl?.beginRefreshing()
-    }
-
-    @objc private func load() {
-        refreshControl?.beginRefreshing()
-        feedLoader.load { [weak self] result in
-            self?.refreshControl?.endRefreshing()
-
-            guard let feed = try? result.get() else { return }
-            self?.tableModel = feed
-            self?.tableView.reloadData()
-        }
     }
 
 }

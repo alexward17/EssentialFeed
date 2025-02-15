@@ -6,9 +6,7 @@ public extension UIView {
         layer.mask?.animation(forKey: shimmerAnimationKey) != nil
     }
 
-    private var shimmerAnimationKey: String {
-        return "shimmer"
-    }
+    private var shimmerAnimationKey: String { AnimationKey.shimmer() }
 
     func startShimmering() {
         let white = UIColor.white.cgColor
@@ -35,4 +33,10 @@ public extension UIView {
     func stopShimmering() {
         layer.mask = nil
     }
+}
+
+public enum AnimationKey: String {
+    case shimmer
+
+    func callAsFunction() -> String { rawValue }
 }

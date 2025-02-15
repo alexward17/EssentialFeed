@@ -384,6 +384,7 @@ extension FeedViewController {
         })
 
         refreshControl = mockRefresh
+        refreshController?.view = mockRefresh
     }
 
     func simulateUserInitiatedFeedReload() {
