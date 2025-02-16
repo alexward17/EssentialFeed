@@ -76,4 +76,5 @@ extension FeedViewController {
     private func cellController(forRowAt indexPath: IndexPath) -> FeedImageCellController {
         tableModel[indexPath.row]
     }
+
 }
