@@ -1,9 +1,11 @@
 import Foundation
+import Combine
 
 final class FeedViewModel {
 
     // MARK: - Types
 
+    typealias StateSubject<T> = PassthroughSubject<T, Never>
     typealias Observer<T> = (T) -> Void
 
     // MARK: - Properties

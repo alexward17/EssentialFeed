@@ -13,6 +13,7 @@ public class FeedImageCell: UITableViewCell {
     public let descriptionLabel = UILabel()
     public let feedImageContainer = UIView()
     public var feedImageView = UIImageView()
+
     public private(set) lazy var feedImageRetryButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(retryActionButtonTapped), for: .touchUpInside)
@@ -20,13 +21,6 @@ public class FeedImageCell: UITableViewCell {
     }()
 
     var onRetry: (() -> Void)?
-
-    func configure(with model: FeedImage?) {
-        descriptionLabel.text = model?.description
-        locationLabel.text = model?.location
-        descriptionLabel.isHidden = model?.description == nil
-        locationLabel.isHidden = model?.location == nil
-    }
 
     @objc private func retryActionButtonTapped() {
         onRetry?()
