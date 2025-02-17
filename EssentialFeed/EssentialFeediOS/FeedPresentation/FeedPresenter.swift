@@ -24,25 +24,20 @@ final class FeedPresenter {
 
     // MARK: - Properties
 
-    private final var feedLoader: FeedLoader
     final var feedView: FeedView?
     final var loadingView: FeedLoadingView?
 
-    // MARK: - Initializers
-
-    init(feedLoader: FeedLoader) {
-        self.feedLoader = feedLoader
+    final func didStartLoadingFeed() {
+        loadingView?.display(FeedLoadingViewModel(isLoading: true))
     }
 
-    final func loadFeed() {
-        loadingView?.display(FeedLoadingViewModel(isLoading: true))
-        feedLoader.load { [weak self] result in
-            self?.loadingView?.display(FeedLoadingViewModel(isLoading: false))
+    final func didFinishLoadingFeed(with feed: [FeedImage]) {
+        feedView?.display(FeedViewModel(feed: feed))
+        loadingView?.display(FeedLoadingViewModel(isLoading: false))
+    }
 
-            guard let self, let feed = try? result.get() else { return }
-
-            feedView?.display(FeedViewModel(feed: feed))
-        }
+    final func didFinishLoadingFeed(with error: Error) {
+        loadingView?.display(FeedLoadingViewModel(isLoading: false))
     }
 
 }
