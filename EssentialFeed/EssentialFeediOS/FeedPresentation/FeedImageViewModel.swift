@@ -6,28 +6,24 @@ final class FeedImageViewModel<Image> {
 
     typealias Observer<T> = (T) -> Void
 
+    // MARK: - Private Properties
+
+    private final var imageLoader: FeedImageDataLoader
+    private final let model: FeedImage
+    private final var task: FeedImageDataLoaderTask?
+    private final let imageTransformer: (Data) -> Image?
+
     // MARK: - Properties
 
-    private var imageLoader: FeedImageDataLoader
-    private let model: FeedImage
-    private var task: FeedImageDataLoaderTask?
-    private let imageTransformer: (Data) -> Image?
+    final var onImageLoad: Observer<Image>?
+    final var onImageLoadingStateChange: Observer<Bool>?
+    final var onShouldRetryImageLoadStateChange: Observer<Bool>?
 
-    var description: String? {
-        model.description
-    }
+    // MARK: - Computed Variables
 
-    var location: String? {
-        model.location
-    }
-
-    var hasLocation: Bool {
-        location != nil
-    }
-
-    var onImageLoad: Observer<Image>?
-    var onImageLoadingStateChange: Observer<Bool>?
-    var onShouldRetryImageLoadStateChange: Observer<Bool>?
+    final var description: String? { model.description }
+    final var location: String? { model.location }
+    final var hasLocation: Bool { location != nil }
 
     // MARK: - Initializers
 

@@ -1,18 +1,24 @@
-import Foundation
-import Combine
+import UIKit
 
-final class FeedViewModel {
+protocol FeedView {
+    func display(feed: [FeedImage])
+}
+
+protocol FeedLoadingView: AnyObject {
+    func display(isLoading: Bool)
+}
+
+final class FeedPresenter {
 
     // MARK: - Types
 
-    typealias StateSubject<T> = PassthroughSubject<T, Never>
     typealias Observer<T> = (T) -> Void
 
     // MARK: - Properties
 
     private final var feedLoader: FeedLoader
-    final var onLoadingStateChange: Observer<Bool>?
-    final var onFeedLoad: Observer<[FeedImage]>?
+    final var feedView: FeedView?
+    final weak var loadingView: FeedLoadingView?
 
     // MARK: - Initializers
 
@@ -21,14 +27,13 @@ final class FeedViewModel {
     }
 
     final func loadFeed() {
-        onLoadingStateChange?(true)
+        loadingView?.display(isLoading: true)
         feedLoader.load { [weak self] result in
-            self?.onLoadingStateChange?(false)
+            self?.loadingView?.display(isLoading: false)
 
             guard let self, let feed = try? result.get() else { return }
 
-            onLoadingStateChange?(false)
-            onFeedLoad?(feed)
+            feedView?.display(feed: feed)
         }
     }
 
