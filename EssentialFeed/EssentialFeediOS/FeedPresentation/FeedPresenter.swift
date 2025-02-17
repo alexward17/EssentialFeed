@@ -1,11 +1,19 @@
 import UIKit
 
+struct FeedViewModel {
+    let feed: [FeedImage]
+}
+
 protocol FeedView {
-    func display(feed: [FeedImage])
+    func display(_ viewModel: FeedViewModel)
+}
+
+struct FeedLoadingViewModel {
+    let isLoading: Bool
 }
 
 protocol FeedLoadingView {
-    func display(isLoading: Bool)
+    func display(_ viewModel: FeedLoadingViewModel)
 }
 
 final class FeedPresenter {
@@ -27,13 +35,13 @@ final class FeedPresenter {
     }
 
     final func loadFeed() {
-        loadingView?.display(isLoading: true)
+        loadingView?.display(FeedLoadingViewModel(isLoading: true))
         feedLoader.load { [weak self] result in
-            self?.loadingView?.display(isLoading: false)
+            self?.loadingView?.display(FeedLoadingViewModel(isLoading: false))
 
             guard let self, let feed = try? result.get() else { return }
 
-            feedView?.display(feed: feed)
+            feedView?.display(FeedViewModel(feed: feed))
         }
     }
 
