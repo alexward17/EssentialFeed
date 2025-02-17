@@ -9,7 +9,7 @@ public final class FeedRefreshViewController: NSObject, FeedLoadingView {
 
     // MARK: - Properties
 
-    private let presenter: FeedPresenter
+    private let loadFeed: () -> Void
 
     // MARK: - Views
 
@@ -17,15 +17,15 @@ public final class FeedRefreshViewController: NSObject, FeedLoadingView {
 
     // MARK: - Initializers
 
-    init(presenter: FeedPresenter) {
-        self.presenter = presenter
+    init(loadFeed: @escaping () -> Void) {
+        self.loadFeed = loadFeed
         super.init()
     }
 
     // MARK: - Objc Functions
 
     @objc final func refresh() {
-        presenter.loadFeed()
+        loadFeed()
     }
 
     private final func loadView(_ view: UIRefreshControl) -> UIRefreshControl {
