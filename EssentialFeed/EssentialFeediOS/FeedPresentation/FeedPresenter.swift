@@ -24,20 +24,25 @@ final class FeedPresenter {
 
     // MARK: - Properties
 
-    final var feedView: FeedView?
-    final var loadingView: FeedLoadingView?
+    final var feedView: FeedView
+    final var loadingView: FeedLoadingView
+
+    init(feedView: FeedView, loadingView: FeedLoadingView) {
+        self.feedView = feedView
+        self.loadingView = loadingView
+    }
 
     final func didStartLoadingFeed() {
-        loadingView?.display(FeedLoadingViewModel(isLoading: true))
+        loadingView.display(FeedLoadingViewModel(isLoading: true))
     }
 
     final func didFinishLoadingFeed(with feed: [FeedImage]) {
-        feedView?.display(FeedViewModel(feed: feed))
-        loadingView?.display(FeedLoadingViewModel(isLoading: false))
+        feedView.display(FeedViewModel(feed: feed))
+        loadingView.display(FeedLoadingViewModel(isLoading: false))
     }
 
     final func didFinishLoadingFeed(with error: Error) {
-        loadingView?.display(FeedLoadingViewModel(isLoading: false))
+        loadingView.display(FeedLoadingViewModel(isLoading: false))
     }
 
 }
