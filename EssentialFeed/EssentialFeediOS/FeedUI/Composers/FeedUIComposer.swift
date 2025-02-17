@@ -14,22 +14,6 @@ public final class FeedUIComposer {
 
 }
 
-private final class WeakRefVirtualProxy<T: AnyObject> {
-    private weak var object: T?
-
-    init(_ object: T) {
-        self.object = object
-    }
-}
-
-extension WeakRefVirtualProxy: FeedLoadingView where T: FeedLoadingView {
-    func display(isLoading: Bool) {
-        object?.display(isLoading: isLoading)
-    }
-    
-
-}
-
 private final class FeedViewAdapter: FeedView {
 
     // MARK: - Properties
@@ -60,5 +44,20 @@ private final class FeedViewAdapter: FeedView {
 
     // THIS IS THE ADDAPTER PATTERN, it allows `adaptation` of un-matching APIs.
     // In thise case onRefresh delivers [FeedImage] that are adapted to [FeedImageCellController] on which the FeedViewController depends
+
+}
+
+private final class WeakRefVirtualProxy<T: AnyObject> {
+    private weak var object: T?
+
+    init(_ object: T) {
+        self.object = object
+    }
+}
+
+extension WeakRefVirtualProxy: FeedLoadingView where T: FeedLoadingView {
+    func display(isLoading: Bool) {
+        object?.display(isLoading: isLoading)
+    }
 
 }
