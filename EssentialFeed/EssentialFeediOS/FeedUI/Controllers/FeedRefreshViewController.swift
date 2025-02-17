@@ -1,15 +1,18 @@
 import UIKit
 
+protocol FeedRefreshViewControllerDelegate {
+    func didRequestFeedRefresh()
+}
+
 public final class FeedRefreshViewController: NSObject, FeedLoadingView {
 
     func display(_ viewModel: FeedLoadingViewModel) {
         viewModel.isLoading ? view.beginRefreshing() : view.endRefreshing()
     }
 
-
     // MARK: - Properties
 
-    private let loadFeed: () -> Void
+    private let delegate: FeedRefreshViewControllerDelegate
 
     // MARK: - Views
 
@@ -17,15 +20,15 @@ public final class FeedRefreshViewController: NSObject, FeedLoadingView {
 
     // MARK: - Initializers
 
-    init(loadFeed: @escaping () -> Void) {
-        self.loadFeed = loadFeed
+    init(delegate: FeedRefreshViewControllerDelegate) {
+        self.delegate = delegate
         super.init()
     }
 
     // MARK: - Objc Functions
 
     @objc final func refresh() {
-        loadFeed()
+        delegate.didRequestFeedRefresh()
     }
 
     private final func loadView(_ view: UIRefreshControl) -> UIRefreshControl {
