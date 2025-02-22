@@ -10,13 +10,6 @@ public class FeedViewController: UITableViewController, UITableViewDataSourcePre
 
     private var onViewAppearing: ((FeedViewController) -> Void)?
 
-    // MARK: - Initializers
-
-    public convenience init(refreshController: FeedRefreshViewController) {
-        self.init()
-        self.refreshController = refreshController
-    }
-
     // MARK: - Lifecycle Functions
 
     public override func viewDidLoad() {
