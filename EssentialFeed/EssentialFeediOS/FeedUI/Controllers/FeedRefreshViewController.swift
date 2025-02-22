@@ -8,23 +8,16 @@ public final class FeedRefreshViewController: NSObject {
 
     // MARK: - Properties
 
-    private let delegate: FeedRefreshViewControllerDelegate
+    var delegate: FeedRefreshViewControllerDelegate?
 
     // MARK: - Views
 
-    @IBOutlet private var view: UIRefreshControl?
-
-    // MARK: - Initializers
-
-    init(delegate: FeedRefreshViewControllerDelegate) {
-        self.delegate = delegate
-        super.init()
-    }
+    @IBOutlet public var view: UIRefreshControl?
 
     // MARK: - Objc Functions
 
-    @objc final func refresh() {
-        delegate.didRequestFeedRefresh()
+    @IBAction func refresh() {
+        delegate?.didRequestFeedRefresh()
     }
 
 }

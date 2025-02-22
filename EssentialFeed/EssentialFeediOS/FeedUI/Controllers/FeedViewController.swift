@@ -4,7 +4,7 @@ public class FeedViewController: UITableViewController, UITableViewDataSourcePre
 
     // MARK: - Properties
 
-    public var refreshController: FeedRefreshViewController?
+    @IBOutlet public var refreshController: FeedRefreshViewController?
     private var cellControllers = [IndexPath: FeedImageCellController]()
     final var tableModel = [FeedImageCellController]() { didSet { tableView.reloadData() } }
 
@@ -16,7 +16,6 @@ public class FeedViewController: UITableViewController, UITableViewDataSourcePre
         super.viewDidLoad()
         tableView.register(FeedImageCell.self, forCellReuseIdentifier: String(describing: FeedImageCell.self))
         tableView.prefetchDataSource = self
-        refreshControl = refreshController?.view
 
         onViewAppearing = { vc in
             vc.refresh()
