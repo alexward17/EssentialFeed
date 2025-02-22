@@ -4,11 +4,7 @@ protocol FeedRefreshViewControllerDelegate {
     func didRequestFeedRefresh()
 }
 
-public final class FeedRefreshViewController: NSObject, FeedLoadingView {
-
-    func display(_ viewModel: FeedLoadingViewModel) {
-        viewModel.isLoading ? view.beginRefreshing() : view.endRefreshing()
-    }
+public final class FeedRefreshViewController: NSObject {
 
     // MARK: - Properties
 
@@ -16,7 +12,7 @@ public final class FeedRefreshViewController: NSObject, FeedLoadingView {
 
     // MARK: - Views
 
-    public final lazy var view: UIRefreshControl = loadView(UIRefreshControl())
+    @IBOutlet private var view: UIRefreshControl?
 
     // MARK: - Initializers
 
@@ -31,10 +27,14 @@ public final class FeedRefreshViewController: NSObject, FeedLoadingView {
         delegate.didRequestFeedRefresh()
     }
 
-    private final func loadView(_ view: UIRefreshControl) -> UIRefreshControl {
-        let view = UIRefreshControl()
-        view.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        return view
+}
+
+// MARK: - Feed Loading View Implamentation
+
+extension FeedRefreshViewController: FeedLoadingView {
+
+    func display(_ viewModel: FeedLoadingViewModel) {
+        viewModel.isLoading ? view?.beginRefreshing() : view?.endRefreshing()
     }
 
 }
