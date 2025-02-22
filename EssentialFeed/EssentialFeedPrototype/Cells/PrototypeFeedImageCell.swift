@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class FeedImageCell: UITableViewCell {
+final class PrototypeFeedImageCell: UITableViewCell {
     @IBOutlet private(set) var locationContainer: UIView!
     @IBOutlet private(set) var locationLabel: UILabel!
     @IBOutlet private(set) var feedImageView: UIImageView!
@@ -37,8 +37,8 @@ final class FeedImageCell: UITableViewCell {
     }
 }
 
-extension FeedImageCell {
-    func configuew(with model: FeedImageViewModel) {
+extension PrototypeFeedImageCell {
+    func configuew(with model: PrototypeFeedImageViewModel) {
         descriptionLabel.text = model.description
         locationLabel.text = model.location
         descriptionLabel.isHidden = model.description == nil

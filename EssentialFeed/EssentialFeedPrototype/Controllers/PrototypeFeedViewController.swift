@@ -1,12 +1,12 @@
 import UIKit
 
-struct FeedImageViewModel {
+struct PrototypeFeedImageViewModel {
     let description: String?
     let location: String?
     let imageName: String
 }
 
-final class FeedViewController: UITableViewController {
+final class PrototypeFeedViewController: UITableViewController {
 
     // MARK: - Lifecycle Functions
 
@@ -18,7 +18,7 @@ final class FeedViewController: UITableViewController {
 
     // MARK: - Properties
 
-    private var feed = [FeedImageViewModel]()
+    private var feed = [PrototypeFeedImageViewModel]()
 
     // MARK: - Helper Functions
 
@@ -28,7 +28,7 @@ final class FeedViewController: UITableViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
             guard let self else { return }
             if feed.isEmpty  {
-                feed = FeedImageViewModel.prototypeFeed
+                feed = PrototypeFeedImageViewModel.prototypeFeed
                 tableView.reloadData()
             }
             refreshControl?.endRefreshing()
@@ -39,7 +39,7 @@ final class FeedViewController: UITableViewController {
 
 
 
-extension FeedViewController {
+extension PrototypeFeedViewController {
 
     // MARK: - Table View Delegate
 
@@ -48,7 +48,7 @@ extension FeedViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: String(String(describing: FeedImageCell.self))) as? FeedImageCell ?? FeedImageCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(String(describing: PrototypeFeedImageCell.self))) as? PrototypeFeedImageCell ?? PrototypeFeedImageCell()
 
         cell.configuew(with: feed[indexPath.row])
 
@@ -56,7 +56,7 @@ extension FeedViewController {
     }
 }
 
-extension FeedViewController {
+extension PrototypeFeedViewController {
 
     // MARK: - Previews
 
@@ -65,7 +65,7 @@ extension FeedViewController {
     @available(iOS 17, *)
     #Preview("Feed View Controller") {
 
-        let controller = FeedViewController()
+        let controller = PrototypeFeedViewController()
 
         return controller
     }
