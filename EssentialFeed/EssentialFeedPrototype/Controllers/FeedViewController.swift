@@ -1,16 +1,16 @@
 import UIKit
 
-struct FeedImageViewModel {
+public struct FeedImageViewModel {
     let description: String?
     let location: String?
     let imageName: String
 }
 
-final class FeedViewController: UITableViewController {
+public class FeedViewController: UITableViewController {
 
     // MARK: - Lifecycle Functions
 
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refresh()
         tableView.setContentOffset(CGPoint(x: .zero, y: -tableView.contentInset.top), animated: false)
@@ -43,11 +43,11 @@ extension FeedViewController {
 
     // MARK: - Table View Delegate
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         feed.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(String(describing: FeedImageCell.self))) as? FeedImageCell ?? FeedImageCell()
 
         cell.configuew(with: feed[indexPath.row])

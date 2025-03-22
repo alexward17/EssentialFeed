@@ -13,6 +13,8 @@
 		C715D4442D0BC6F90070CC83 /* LoadFeedFromRemoteUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C715D4432D0BC6F90070CC83 /* LoadFeedFromRemoteUseCaseTests.swift */; };
 		C715D4472D0E10790070CC83 /* RemoteFeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C715D4462D0E10790070CC83 /* RemoteFeedLoader.swift */; };
 		C7269A0F2D8F08EC008B859C /* FeedPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7269A0E2D8F08EC008B859C /* FeedPresenterTests.swift */; };
+		C7269A162D8F1B8D008B859C /* Feed.strings in Resources */ = {isa = PBXBuildFile; fileRef = C7269A142D8F1B8D008B859C /* Feed.strings */; };
+		C7269A252D8F1CD9008B859C /* Feed.strings in Resources */ = {isa = PBXBuildFile; fileRef = C7269A142D8F1B8D008B859C /* Feed.strings */; };
 		C73444CE2D272B85007199B4 /* CacheFeedUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73444CD2D272B85007199B4 /* CacheFeedUseCaseTests.swift */; };
 		C73444D12D29D85B007199B4 /* LocalFeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73444D02D29D85B007199B4 /* LocalFeedLoader.swift */; };
 		C73444D32D29D875007199B4 /* FeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73444D22D29D875007199B4 /* FeedStore.swift */; };
@@ -122,6 +124,9 @@
 		C715D4432D0BC6F90070CC83 /* LoadFeedFromRemoteUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadFeedFromRemoteUseCaseTests.swift; sourceTree = "<group>"; };
 		C715D4462D0E10790070CC83 /* RemoteFeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoader.swift; sourceTree = "<group>"; };
 		C7269A0E2D8F08EC008B859C /* FeedPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenterTests.swift; sourceTree = "<group>"; };
+		C7269A152D8F1B8D008B859C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Feed.strings; sourceTree = "<group>"; };
+		C7269A1F2D8F1BE6008B859C /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Feed.strings"; sourceTree = "<group>"; };
+		C7269A242D8F1BF1008B859C /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Feed.strings; sourceTree = "<group>"; };
 		C73444CD2D272B85007199B4 /* CacheFeedUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheFeedUseCaseTests.swift; sourceTree = "<group>"; };
 		C73444D02D29D85B007199B4 /* LocalFeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFeedLoader.swift; sourceTree = "<group>"; };
 		C73444D22D29D875007199B4 /* FeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStore.swift; sourceTree = "<group>"; };
@@ -277,6 +282,7 @@
 				080EDEF521B6DA7E00813479 /* Info.plist */,
 				080EDF1021B6DFA200813479 /* Feed Feature */,
 				C715D4452D0E10510070CC83 /* Feed API */,
+				C7269A142D8F1B8D008B859C /* Feed.strings */,
 			);
 			path = EssentialFeed;
 			sourceTree = "<group>";
@@ -601,6 +607,8 @@
 			knownRegions = (
 				en,
 				Base,
+				"pt-BR",
+				el,
 			);
 			mainGroup = 080EDEE721B6DA7E00813479;
 			productRefGroup = 080EDEF221B6DA7E00813479 /* Products */;
@@ -623,6 +631,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7269A162D8F1B8D008B859C /* Feed.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -630,6 +639,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7269A252D8F1CD9008B859C /* Feed.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -792,12 +802,26 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		C7269A142D8F1B8D008B859C /* Feed.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C7269A152D8F1B8D008B859C /* en */,
+				C7269A1F2D8F1BE6008B859C /* pt-BR */,
+				C7269A242D8F1BF1008B859C /* el */,
+			);
+			name = Feed.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		080EDF0321B6DA7E00813479 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -868,6 +892,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
