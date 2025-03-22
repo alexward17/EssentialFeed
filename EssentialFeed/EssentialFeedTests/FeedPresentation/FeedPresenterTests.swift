@@ -36,6 +36,10 @@ public protocol FeedErrorView {
 
 class FeedPresenterTests: XCTestCase {
 
+    func test_titleIsLocalized() {
+        XCTAssertEqual(FeedPresenter.title, localized("FEED_VIEW_TITLE"))
+    }
+
     func test_init_doesNotSendMessagesToView() {
         let (_, view) = makeSUT()
         XCTAssertTrue(view.messages.isEmpty, "Expected no messages to be sent to the view")
@@ -97,6 +101,14 @@ class FeedPresenterTests: XCTestCase {
         final var feedView: FeedView
         final var loadingView: FeedLoadingView
         final let errorView: FeedErrorView
+
+        static var title: String {
+            return NSLocalizedString("FEED_VIEW_TITLE",
+                    tableName: "Feed",
+                    bundle: Bundle(for: FeedPresenter.self),
+                    comment: "Error message displayed when we can't load the image feed from the server")
+        }
+
 
         private var feedLoadError: String {
             return NSLocalizedString("FEED_VIEW_CONNECTION_ERROR",
