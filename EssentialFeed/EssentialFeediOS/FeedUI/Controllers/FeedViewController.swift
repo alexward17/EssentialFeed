@@ -1,6 +1,9 @@
 import UIKit
 
-public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
+public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, FeedErrorView {
+    public func display(_ viewModel: FeedErrorViewModel) {
+        return
+    }
 
     // MARK: - Properties
 
