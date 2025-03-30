@@ -53,7 +53,7 @@ class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
         // Alternitavely, you can create a CoreData stack with an in-memory persistent store configuration for the tests
 
         let storeURL = URL(fileURLWithPath: "/dev/null")
-        let sut = try! CoreDataFeedStore(storeURL: storeURL, bundle: storeBundle)
+        let sut = try! CoreDataFeedStore(storeURL: storeURL)
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
     }
