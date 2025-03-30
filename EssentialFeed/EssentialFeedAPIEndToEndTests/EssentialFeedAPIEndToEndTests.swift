@@ -1,105 +1,139 @@
 //
-//  EssentialFeedAPIEndToEndTests.swift
-//  EssentialFeedAPIEndToEndTests
-//
-//  Created by Alex Ward on 2024-12-24.
+//  Copyright © 2019 Essential Developer. All rights reserved.
 //
 
 import XCTest
 import EssentialFeed
+
 class EssentialFeedAPIEndToEndTests: XCTestCase {
 
     func test_endToEndTestServerGETFeedResult_matchesFixedTestAccountData() {
         switch getFeedResult() {
-        case .success(let imageFeed):
-            XCTAssertEqual(imageFeed.count, 8)
-            XCTAssertEqual(EXPECTED_FEED_IMAGE_IDS, imageFeed.map({ $0.id.uuidString }))
-            XCTAssertEqual(EXPECTED_FEED_IMAGE_DESCRIPTIONS, imageFeed.map({ $0.description }))
-            XCTAssertEqual(EXPECTED_FEED_IMAGE_LOCATIONS, imageFeed.map({ $0.location }))
-            XCTAssertEqual(EXPECTED_FEED_IMAGE_IMAGE_URLS, imageFeed.map({ $0.url.absoluteString }))
-        default: XCTFail("Should have succeeded")
+        case let .success(imageFeed)?:
+            XCTAssertEqual(imageFeed.count, 8, "Expected 8 images in the test account image feed")
+            XCTAssertEqual(imageFeed[0], expectedImage(at: 0))
+            XCTAssertEqual(imageFeed[1], expectedImage(at: 1))
+            XCTAssertEqual(imageFeed[2], expectedImage(at: 2))
+            XCTAssertEqual(imageFeed[3], expectedImage(at: 3))
+            XCTAssertEqual(imageFeed[4], expectedImage(at: 4))
+            XCTAssertEqual(imageFeed[5], expectedImage(at: 5))
+            XCTAssertEqual(imageFeed[6], expectedImage(at: 6))
+            XCTAssertEqual(imageFeed[7], expectedImage(at: 7))
+
+        case let .failure(error)?:
+            XCTFail("Expected successful feed result, got \(error) instead")
+
+        default:
+            XCTFail("Expected successful feed result, got no result instead")
         }
     }
 
-// MARK: - Helpers
+    func test_endToEndTestServerGETFeedImageDataResult_matchesFixedTestAccountData() {
+        switch getFeedImageDataResult() {
+        case let .success(data)?:
+            XCTAssertFalse(data.isEmpty, "Expected non-empty image data")
 
-    private func getFeedResult(file: StaticString = #filePath, line: UInt = #line) -> FeedLoader.Result? {
-        let client = URLSessionHTTPClient()
-        let url = URL(string: "https://essentialdeveloper.com/feed-case-study/test-api/feed")!
-        let loader = RemoteFeedLoader(url: url, client: client)
-        trackForMemoryLeaks(client, file: file, line: line)
+        case let .failure(error)?:
+            XCTFail("Expected successful image data result, got \(error) instead")
+
+        default:
+            XCTFail("Expected successful image data result, got no result instead")
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func getFeedResult(file: StaticString = #file, line: UInt = #line) -> FeedLoader.Result? {
+        let loader = RemoteFeedLoader(url: feedTestServerURL, client: ephemeralClient())
         trackForMemoryLeaks(loader, file: file, line: line)
+
         let exp = expectation(description: "Wait for load completion")
+
         var receivedResult: FeedLoader.Result?
-        loader.load(completion: { result in
+        loader.load { result in
             receivedResult = result
             exp.fulfill()
-        })
-        wait(for: [exp], timeout: 10)
+        }
+        wait(for: [exp], timeout: 5.0)
+
         return receivedResult
     }
 
-}
+    private func getFeedImageDataResult(file: StaticString = #file, line: UInt = #line) -> FeedImageDataLoader.Result? {
+        let loader = RemoteFeedImageDataLoader(client: ephemeralClient())
+        trackForMemoryLeaks(loader, file: file, line: line)
 
-var EXPECTED_FEED_IMAGE_IDS: [String] {
-    SERVER_IMAGES.compactMap({ $0["id"] })
-}
+        let exp = expectation(description: "Wait for load completion")
+        let url = feedTestServerURL.appendingPathComponent("73A7F70C-75DA-4C2E-B5A3-EED40DC53AA6/image")
 
-var EXPECTED_FEED_IMAGE_DESCRIPTIONS: [String?] {
-    SERVER_IMAGES.map({ $0["description"] })
-}
+        var receivedResult: FeedImageDataLoader.Result?
+        _ = loader.loadImageData(from: url) { result in
+            receivedResult = result
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 5.0)
 
-var EXPECTED_FEED_IMAGE_LOCATIONS: [String?] {
-    SERVER_IMAGES.map({ $0["location"] })
-}
+        return receivedResult
+    }
 
-var EXPECTED_FEED_IMAGE_IMAGE_URLS: [String] {
-    SERVER_IMAGES.compactMap({ $0["image"] })
-}
+    private var feedTestServerURL: URL {
+        return URL(string: "https://essentialdeveloper.com/feed-case-study/test-api/feed")!
+    }
 
-let SERVER_IMAGES: [[String: String]] = [
-    [
-        "id": "73A7F70C-75DA-4C2E-B5A3-EED40DC53AA6",
-        "description": "Description 1",
-        "location": "Location 1",
-        "image": "https://url-1.com",
-    ],
-    [
-        "id": "BA298A85-6275-48D3-8315-9C8F7C1CD109",
-        "location": "Location 2",
-        "image": "https://url-2.com",
-    ],
-    [
-        "id": "5A0D45B3-8E26-4385-8C5D-213E160A5E3C",
-        "description": "Description 3",
-        "image": "https://url-3.com",
-    ],
-    [
-        "id": "FF0ECFE2-2879-403F-8DBE-A83B4010B340",
-        "image": "https://url-4.com",
-    ],
-    [
-        "id": "DC97EF5E-2CC9-4905-A8AD-3C351C311001",
-        "description": "Description 5",
-        "location": "Location 5",
-        "image": "https://url-5.com",
-    ],
-    [
-        "id": "557D87F1-25D3-4D77-82E9-364B2ED9CB30",
-        "description": "Description 6",
-        "location": "Location 6",
-        "image": "https://url-6.com",
-    ],
-    [
-        "id": "A83284EF-C2DF-415D-AB73-2A9B8B04950B",
-        "description": "Description 7",
-        "location": "Location 7",
-        "image": "https://url-7.com",
-    ],
-    [
-        "id": "F79BD7F8-063F-46E2-8147-A67635C3BB01",
-        "description": "Description 8",
-        "location": "Location 8",
-        "image": "https://url-8.com",
-    ]
-]
+    private func ephemeralClient(file: StaticString = #file, line: UInt = #line) -> HTTPClient {
+        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+        trackForMemoryLeaks(client, file: file, line: line)
+        return client
+    }
+
+    private func expectedImage(at index: Int) -> FeedImage {
+        return FeedImage(
+            id: id(at: index),
+            description: description(at: index),
+            location: location(at: index),
+            url: imageURL(at: index))
+    }
+
+    private func id(at index: Int) -> UUID {
+        return UUID(uuidString: [
+            "73A7F70C-75DA-4C2E-B5A3-EED40DC53AA6",
+            "BA298A85-6275-48D3-8315-9C8F7C1CD109",
+            "5A0D45B3-8E26-4385-8C5D-213E160A5E3C",
+            "FF0ECFE2-2879-403F-8DBE-A83B4010B340",
+            "DC97EF5E-2CC9-4905-A8AD-3C351C311001",
+            "557D87F1-25D3-4D77-82E9-364B2ED9CB30",
+            "A83284EF-C2DF-415D-AB73-2A9B8B04950B",
+            "F79BD7F8-063F-46E2-8147-A67635C3BB01"
+        ][index])!
+    }
+
+    private func description(at index: Int) -> String? {
+        return [
+            "Description 1",
+            nil,
+            "Description 3",
+            nil,
+            "Description 5",
+            "Description 6",
+            "Description 7",
+            "Description 8"
+        ][index]
+    }
+
+    private func location(at index: Int) -> String? {
+        return [
+            "Location 1",
+            "Location 2",
+            nil,
+            nil,
+            "Location 5",
+            "Location 6",
+            "Location 7",
+            "Location 8"
+        ][index]
+    }
+
+    private func imageURL(at index: Int) -> URL {
+        return URL(string: "https://url-\(index+1).com")!
+    }
+}

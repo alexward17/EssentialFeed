@@ -1,29 +1,39 @@
 //
-//  URLSessionHTTPClient.swift
-//  EssentialFeed
-//
-//  Created by Alex Ward on 2024-12-23.
+//  Copyright © 2019 Essential Developer. All rights reserved.
 //
 
 import Foundation
 
-public class URLSessionHTTPClient: HTTPClient {
+public final class URLSessionHTTPClient: HTTPClient {
     private let session: URLSession
 
-    public init(session: URLSession = .shared) {
+    public init(session: URLSession) {
         self.session = session
     }
 
-    private struct UnexpercetedRepresentationValueError: Error {}
+    private struct UnexpectedValuesRepresentation: Error {}
 
-    public func get(from url: URL, completion completionHandler: @escaping (HTTPClient.Result) -> Void) {
-        session.dataTask(with: url, completionHandler: { data, response, error in
-            completionHandler(Result(catching: {
-                if let error { throw error }
-                else if let response = response as? HTTPURLResponse, let data {
+    private struct URLSessionTaskWrapper: HTTPClientTask {
+        let wrapped: URLSessionTask
+
+        func cancel() {
+            wrapped.cancel()
+        }
+    }
+
+    public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
+        let task = session.dataTask(with: url) { data, response, error in
+            completion(Result {
+                if let error = error {
+                    throw error
+                } else if let data = data, let response = response as? HTTPURLResponse {
                     return (data, response)
-                } else { throw UnexpercetedRepresentationValueError() }
-            }))
-        }).resume()
+                } else {
+                    throw UnexpectedValuesRepresentation()
+                }
+            })
+        }
+        task.resume()
+        return URLSessionTaskWrapper(wrapped: task)
     }
 }
