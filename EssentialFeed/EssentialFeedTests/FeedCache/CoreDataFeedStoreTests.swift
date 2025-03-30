@@ -46,8 +46,6 @@ class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
     // MARK: - Test Helpers
 
     private func makeSUT(storeURL: URL? = nil, file: StaticString = #file, line: UInt = #line) -> FeedStore {
-        let storeBundle = Bundle(for: CoreDataFeedStore.self)
-
         // Writing to "dev/null" device discards all data written to it, but reports write operation success
         // The writes are ignored but CoreData still works with the in-memory object graph
         // Alternitavely, you can create a CoreData stack with an in-memory persistent store configuration for the tests
