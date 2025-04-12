@@ -1,4 +1,5 @@
 import XCTest
+import EssentialFeed
 import EssentialFeediOS
 
 final class FeedViewControllerTests: XCTestCase {
