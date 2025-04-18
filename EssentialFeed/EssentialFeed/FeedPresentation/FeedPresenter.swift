@@ -12,11 +12,11 @@ public struct FeedLoadingViewModel {
 
 public struct FeedErrorViewModel {
     public let message: String?
-
+    
     public static var noError: FeedErrorViewModel {
         return FeedErrorViewModel(message: nil)
     }
-
+    
     public static func error(message: String) -> FeedErrorViewModel {
         return FeedErrorViewModel(message: message)
     }
@@ -37,59 +37,51 @@ public protocol FeedErrorView {
 // MARK: - Feed Presenter
 
 public class FeedPresenter {
-
+    
     // MARK: - Properties
-
+    
     public final var feedView: FeedView
     public final var loadingView: FeedLoadingView
     public final let errorView: FeedErrorView
-
+    
     public static var title: String {
         return NSLocalizedString("FEED_VIEW_TITLE",
                                  tableName: "Feed",
                                  bundle: Bundle(for: FeedPresenter.self),
                                  comment: "Error message displayed when we can't load the image feed from the server")
     }
-
-
+    
+    
     private var feedLoadError: String {
         return NSLocalizedString("FEED_VIEW_CONNECTION_ERROR",
                                  tableName: "Feed",
                                  bundle: Bundle(for: FeedPresenter.self),
                                  comment: "Error message displayed when we can't load the image feed from the server")
     }
-
+    
     // MARK: - Initializer
-
+    
     public init(feedView: FeedView, loadingView: FeedLoadingView, errorView: FeedErrorView) {
         self.feedView = feedView
         self.loadingView = loadingView
         self.errorView = errorView
     }
-
+    
     // MARK: - Helper Functions
-
+    
     public func didStartLoadingFeed() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            errorView.display(.noError)
-            loadingView.display(FeedLoadingViewModel(isLoading: true))
-        }
+        errorView.display(.noError)
+        loadingView.display(FeedLoadingViewModel(isLoading: true))
     }
-
+    
     public final func didFinishLoadingFeed(with feed: [FeedImage]) {
-        DispatchQueue.main.async { [weak self] in
-            self?.feedView.display(FeedViewModel(feed: feed))
-            self?.loadingView.display(FeedLoadingViewModel(isLoading: false))
-        }
+        feedView.display(FeedViewModel(feed: feed))
+        loadingView.display(FeedLoadingViewModel(isLoading: false))
     }
-
+    
     public final func didFinishLoadingFeed(with error: Error) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            errorView.display(.error(message: feedLoadError))
-            loadingView.display(FeedLoadingViewModel(isLoading: false))
-        }
+        errorView.display(.error(message: feedLoadError))
+        loadingView.display(FeedLoadingViewModel(isLoading: false))
     }
-
+    
 }
