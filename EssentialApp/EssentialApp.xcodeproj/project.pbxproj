@@ -77,11 +77,6 @@
 			path = EssentialAppTests;
 			sourceTree = "<group>";
 		};
-		C7EE472B2DAAB31600F9D796 /* EssentialAppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = EssentialAppUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +120,6 @@
 			children = (
 				C7EE470A2DAAB31400F9D796 /* EssentialApp */,
 				C7EE47212DAAB31600F9D796 /* EssentialAppTests */,
-				C7EE472B2DAAB31600F9D796 /* EssentialAppUITests */,
 				C7045ACE2DAAB75C001844D6 /* Frameworks */,
 				C7EE47092DAAB31400F9D796 /* Products */,
 			);
@@ -203,9 +197,6 @@
 			dependencies = (
 				C7EE472A2DAAB31600F9D796 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				C7EE472B2DAAB31600F9D796 /* EssentialAppUITests */,
-			);
 			name = EssentialAppUITests;
 			packageProductDependencies = (
 			);
@@ -228,6 +219,7 @@
 					};
 					C7EE471D2DAAB31600F9D796 = {
 						CreatedOnToolsVersion = 16.2;
+						LastSwiftMigration = 1620;
 						TestTargetID = C7EE47072DAAB31400F9D796;
 					};
 					C7EE47272DAAB31600F9D796 = {
@@ -500,6 +492,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B3VTTF367S;
@@ -509,6 +502,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Alex-ward-inc..EssentialAppTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EssentialApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EssentialApp";
@@ -519,6 +513,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B3VTTF367S;
