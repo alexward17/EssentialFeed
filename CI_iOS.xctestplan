@@ -9,6 +9,7 @@
     }
   ],
   "defaultOptions" : {
+    "mainThreadCheckerEnabled" : false,
     "testExecutionOrdering" : "random"
   },
   "testTargets" : [

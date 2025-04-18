@@ -70,18 +70,26 @@ public class FeedPresenter {
     // MARK: - Helper Functions
 
     public func didStartLoadingFeed() {
-        errorView.display(.noError)
-        loadingView.display(FeedLoadingViewModel(isLoading: true))
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            errorView.display(.noError)
+            loadingView.display(FeedLoadingViewModel(isLoading: true))
+        }
     }
 
     public final func didFinishLoadingFeed(with feed: [FeedImage]) {
-        feedView.display(FeedViewModel(feed: feed))
-        loadingView.display(FeedLoadingViewModel(isLoading: false))
+        DispatchQueue.main.async { [weak self] in
+            self?.feedView.display(FeedViewModel(feed: feed))
+            self?.loadingView.display(FeedLoadingViewModel(isLoading: false))
+        }
     }
 
     public final func didFinishLoadingFeed(with error: Error) {
-        errorView.display(.error(message: feedLoadError))
-        loadingView.display(FeedLoadingViewModel(isLoading: false))
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            errorView.display(.error(message: feedLoadError))
+            loadingView.display(FeedLoadingViewModel(isLoading: false))
+        }
     }
-    
+
 }
