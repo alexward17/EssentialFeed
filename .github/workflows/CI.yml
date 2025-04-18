@@ -22,7 +22,7 @@ jobs:
           SWIFT_TREAT_WARNINGS_AS_ERRORS=YES \
           OTHER_SWIFT_FLAGS="-D ED_SKIP_SWIFT_FORMAT"
         xcodebuild clean build test \
-          -workspace EssentialApp/EssentialApp.xcworkspace \
+          -workspace EssentialFeed-Starter-Project/EssentialApp.xcworkspace \
           -scheme "CI_iOS" \
           -sdk iphonesimulator \
           -destination "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.2" \
