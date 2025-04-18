@@ -10,7 +10,14 @@ import EssentialFeed
 
 class FeedLoaderWithFallbackComposite: FeedLoader {
     func load(completion: @escaping (FeedLoader.Result) -> Void) {
-        primary.load(completion: completion)
+        primary.load(completion: { [weak self] result in
+            switch result {
+            case .success:
+                completion(result)
+            case .failure:
+                self?.fallback.load(completion: completion)
+            }
+        })
     }
 
 
@@ -31,15 +38,14 @@ class FeedLoaderWithFallbackComposite: FeedLoader {
 class FeedLoaderWithFallbackCompositeTests: XCTestCase {
 
     func test_load_deliversPrimaryFeedOnPrimaryLoadSuccess() {
+
+        let exp = expectation(description: "Wait for load completion")
         let primaryFeed = uniqueFeed()
         let fallbackFeed = uniqueFeed()
-        let primaryLoader = LoaderStub(result: .success(primaryFeed))
-        let fallbackLoader = LoaderStub(result: .success(fallbackFeed))
 
-        let sut = FeedLoaderWithFallbackComposite(primaryLoader: primaryLoader, fallbackLoader: fallbackLoader)
-        let exp = expectation(description: "Wait for load completion")
-
-        sut.load { result in
+        makeSUT(
+            primaryResult: .success(primaryFeed), fallbackResult: .success(fallbackFeed)
+        ).load { result in
             switch result {
             case let .success(receivedFeed):
                 XCTAssertEqual(receivedFeed, primaryFeed)
@@ -53,7 +59,65 @@ class FeedLoaderWithFallbackCompositeTests: XCTestCase {
         wait(for: [exp], timeout: 1)
     }
 
+    func test_load_deliversFallbackFeedOnPrimaryLoadFailure() {
+
+        let exp = expectation(description: "Wait for load completion")
+        let fallbackFeed = uniqueFeed()
+
+        makeSUT(
+            primaryResult: .failure(Self.anyNSError), fallbackResult: .success(fallbackFeed)
+        ).load { result in
+            switch result {
+            case let .success(receivedFeed):
+                XCTAssertEqual(receivedFeed, fallbackFeed)
+
+            case .failure:
+                XCTFail("Expected successful load fallback feed result, for \(result) instead.")
+            }
+            exp.fulfill()
+        }
+
+        wait(for: [exp], timeout: 1)
+    }
+
     // MARK: - Helpers
+
+    private final func makeSUT(
+        primaryResult: FeedLoader.Result,
+        fallbackResult: FeedLoader.Result,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> FeedLoaderWithFallbackComposite {
+
+        let primaryLoader = LoaderStub(result: primaryResult)
+        let fallbackLoader = LoaderStub(result: fallbackResult)
+        let sut = FeedLoaderWithFallbackComposite(primaryLoader: primaryLoader, fallbackLoader: fallbackLoader)
+
+        trackForMemoryLeaks(primaryLoader, file: file, line: line)
+        trackForMemoryLeaks(fallbackLoader, file: file, line: line)
+        trackForMemoryLeaks(primaryLoader, file: file, line: line)
+
+        return sut
+    }
+
+    func trackForMemoryLeaks(
+        _ instance: AnyObject,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(
+                instance, "Instance should have been deallocated. pottential memory leak",
+                file: #filePath,
+                line: #line
+            )
+        }
+    }
+
+    static var anyNSError: NSError {
+        NSError(domain: "any error", code: 0)
+    }
+
 
     private final func uniqueFeed() -> [FeedImage] {
         [FeedImage(id: UUID(), description: "any", location: "any", url: URL(string: "http://any-url.com")!)]
