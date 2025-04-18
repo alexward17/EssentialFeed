@@ -8,6 +8,6 @@
       location = "container:EssentialApp/EssentialApp.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:../CI_iOS.xctestplan">
+      location = "group:CI_iOS.xctestplan">
    </FileRef>
 </Workspace>
