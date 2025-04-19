@@ -70,7 +70,7 @@ extension XCTestCase {
 }
 
 
-final class LoaderStub: FeedLoader {
+final class FeedLoaderStub: FeedLoader {
 
     // MARK: - Properties
 
