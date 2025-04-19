@@ -2,42 +2,101 @@
 import XCTest
 import EssentialFeed
 
+protocol FeedCache {
+    typealias Result = Swift.Result<Void, Error>
+
+    func save(_ feed: [FeedImage], completion: @escaping (Result) -> Void)
+}
+
 public class FeedLoaderCacheDecorator: FeedLoader {
 
     // MARK: - Properties
 
     final let decoratee: FeedLoader
+    final let cache: FeedCache
 
     // MARK: - Initializers
 
-    init(decoratee: FeedLoader) {
+    init(decoratee: FeedLoader, cache: FeedCache) {
         self.decoratee = decoratee
+        self.cache = cache
     }
 
     // MARK: - Helpers
 
     public func load(completion: @escaping (FeedLoader.Result) -> Void) {
-        decoratee.load(completion: completion)
+        decoratee.load(completion: { [weak self] result in
+            switch result {
+            case .success:
+                self?.cache.save((try? result.get()) ?? []) { _ in }
+                completion(result)
+            case  .failure: completion(result)
+            }
+        })
     }
-    
 
 }
 
-class FeedLoaderCacheDecoratorTests: XCTestCase {
+class FeedLoaderCacheDecoratorTests: XCTestCase, FeedLoaderTestCase {
 
     func test_load_deliversFeedOnLoaderSuccess() {
         let feed = uniqueFeed()
-        let loader = FeedLoaderStub(result: .success(feed))
-        let sut = FeedLoaderCacheDecorator(decoratee: loader)
-
-        expect(sut, toCompleteWith: .success(feed))
+        expect(makeSUT(loaderResult: .success(feed)), toCompleteWith: .success(feed))
     }
 
     func test_load_deliversErrorOnLoaderFailre() {
-        let loader = FeedLoaderStub(result: .failure(Self.anyNSError))
-        let sut = FeedLoaderCacheDecorator(decoratee: loader)
+        expect(makeSUT(loaderResult: .failure(Self.anyNSError)), toCompleteWith: .failure(Self.anyNSError))
+    }
 
-        expect(sut, toCompleteWith: .failure(Self.anyNSError))
+    func test_load_cachesLoadedFeedOnloaderSuccess() {
+        let cache = CacheSpy()
+        let feed = uniqueFeed()
+        let sut = makeSUT(loaderResult: .success(feed), cache: cache)
+
+        let exp = expectation(description: "")
+
+        sut.load { _ in
+            exp.fulfill()
+        }
+
+        wait(for: [exp], timeout: 1)
+
+        XCTAssertEqual(cache.messages, [.save(feed)])
+    }
+
+    // MARK: - Helpers
+
+    private final func makeSUT(
+        loaderResult: FeedLoader.Result,
+        cache: CacheSpy = .init(),
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> FeedLoader {
+        let loader = FeedLoaderStub(result: loaderResult)
+        let sut = FeedLoaderCacheDecorator(decoratee: loader, cache: cache)
+        trackForMemoryLeaks(loader, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return sut
+    }
+}
+
+private class CacheSpy: FeedCache {
+
+    // MARK: - Types
+
+    enum Message: Equatable {
+        case save([FeedImage])
+    }
+
+    // MARK: - Properties
+
+    private(set) var messages = [Message]()
+
+    // MARK: - Helpers
+
+    func save(_ feed: [FeedImage], completion: @escaping (FeedCache.Result) -> Void) {
+        messages.append(.save(feed))
+        completion(.success(Void()))
     }
 
 }
