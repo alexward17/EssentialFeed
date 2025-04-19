@@ -26,12 +26,10 @@ public class FeedLoaderCacheDecorator: FeedLoader {
 
     public func load(completion: @escaping (FeedLoader.Result) -> Void) {
         decoratee.load(completion: { [weak self] result in
-            switch result {
-            case .success:
+            if case .success = result {
                 self?.cache.save((try? result.get()) ?? []) { _ in }
-                completion(result)
-            case  .failure: completion(result)
             }
+            completion(result)
         })
     }
 
@@ -53,15 +51,18 @@ class FeedLoaderCacheDecoratorTests: XCTestCase, FeedLoaderTestCase {
         let feed = uniqueFeed()
         let sut = makeSUT(loaderResult: .success(feed), cache: cache)
 
-        let exp = expectation(description: "")
-
-        sut.load { _ in
-            exp.fulfill()
-        }
-
-        wait(for: [exp], timeout: 1)
+        sut.load { _ in }
 
         XCTAssertEqual(cache.messages, [.save(feed)])
+    }
+
+    func test_load_doesNotCacheOnLoaderFailre() {
+        let cache = CacheSpy()
+        let sut = makeSUT(loaderResult: .failure(Self.anyNSError), cache: cache)
+
+        sut.load { _ in }
+
+        XCTAssertEqual(cache.messages, [])
     }
 
     // MARK: - Helpers
