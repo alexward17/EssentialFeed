@@ -9,4 +9,9 @@ import XCTest
 
 final class EssentialAppUIAcceptanceTests: XCTestCase {
 
+
+    func test_onLaunch_displaysRemoteFeedWhenCustomerHasConnectivity() {
+
+    }
+
 }
