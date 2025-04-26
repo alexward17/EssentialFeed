@@ -110,6 +110,7 @@ public class FeedImageCell: UITableViewCell {
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.accessibilityIdentifier = "feed-image-view"
 
         return imageView
     }()
@@ -137,6 +138,7 @@ public class FeedImageCell: UITableViewCell {
     // MARK: - Setup
 
     private final func setupViews() {
+        accessibilityIdentifier = "feed-image-cell"
         selectionStyle = .none
         contentView.addSubview(outerStack)
 
