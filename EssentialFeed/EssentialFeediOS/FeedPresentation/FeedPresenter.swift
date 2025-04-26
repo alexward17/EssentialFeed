@@ -35,16 +35,16 @@ public final class FeedPresenter {
 
     private var title: String {
         return NSLocalizedString("FEED_VIEW_TITLE",
-                tableName: "Feed",
-                bundle: Bundle(for: FeedPresenter.self),
-                comment: "Error message displayed when we can't load the image feed from the server")
+                                 tableName: "Feed",
+                                 bundle: Bundle(for: FeedPresenter.self),
+                                 comment: "Error message displayed when we can't load the image feed from the server")
     }
 
     private var feedLoadError: String {
         return NSLocalizedString("FEED_VIEW_CONNECTION_ERROR",
-                tableName: "Feed",
-                bundle: Bundle(for: FeedPresenter.self),
-                comment: "Error message displayed when we can't load the image feed from the server")
+                                 tableName: "Feed",
+                                 bundle: Bundle(for: FeedPresenter.self),
+                                 comment: "Error message displayed when we can't load the image feed from the server")
     }
 
     public init(feedView: FeedView, loadingView: FeedLoadingView, errorView: FeedErrorView) {
@@ -54,27 +54,19 @@ public final class FeedPresenter {
     }
 
     final func didStartLoadingFeed() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            errorView.display(.noError)
-            loadingView.display(FeedLoadingViewModel(isLoading: true))
-        }
+        errorView.display(.noError)
+        loadingView.display(FeedLoadingViewModel(isLoading: true))
     }
 
     final func didFinishLoadingFeed(with feed: [FeedImage]) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            feedView.display(FeedViewModel(feed: feed))
-            loadingView.display(FeedLoadingViewModel(isLoading: false))
-        }
+        feedView.display(FeedViewModel(feed: feed))
+        loadingView.display(FeedLoadingViewModel(isLoading: false))
     }
 
     final func didFinishLoadingFeed(with error: Error) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            errorView.display(.error(message: feedLoadError))
-            loadingView.display(FeedLoadingViewModel(isLoading: false))
-        }
+
+        errorView.display(.error(message: feedLoadError))
+        loadingView.display(FeedLoadingViewModel(isLoading: false))
     }
 
 }

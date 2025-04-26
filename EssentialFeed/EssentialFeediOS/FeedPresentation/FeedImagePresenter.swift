@@ -24,44 +24,35 @@ final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == I
     }
 
     func didStartLoadingImageData(for model: FeedImage) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            view.display(FeedImageViewModel(
-                description: model.description,
-                location: model.location,
-                image: nil,
-                isLoading: true,
-                shouldRetry: false))
-        }
+        view.display(FeedImageViewModel(
+            description: model.description,
+            location: model.location,
+            image: nil,
+            isLoading: true,
+            shouldRetry: false))
     }
 
     private struct InvalidImageDataError: Error {}
 
     func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            guard let image = imageTransformer(data) else {
-                return didFinishLoadingImageData(with: InvalidImageDataError(), for: model)
-            }
-            view.display(FeedImageViewModel(
-                description: model.description,
-                location: model.location,
-                image: image,
-                isLoading: false,
-                shouldRetry: false))
+        guard let image = imageTransformer(data) else {
+            return didFinishLoadingImageData(with: InvalidImageDataError(), for: model)
         }
+        view.display(FeedImageViewModel(
+            description: model.description,
+            location: model.location,
+            image: image,
+            isLoading: false,
+            shouldRetry: false))
     }
 
     func didFinishLoadingImageData(with error: Error,for model: FeedImage) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            view.display(FeedImageViewModel(
-                description: model.description,
-                location: model.location,
-                image: nil,
-                isLoading: false,
-                shouldRetry: true))
-        }
+        view.display(FeedImageViewModel(
+            description: model.description,
+            location: model.location,
+            image: nil,
+            isLoading: false,
+            shouldRetry: true))
     }
 
 }

@@ -19,6 +19,13 @@
         "identifier" : "C7EE471D2DAAB31600F9D796",
         "name" : "EssentialAppTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:EssentialFeed\/EssentialFeed.xcodeproj",
+        "identifier" : "C7FCE8CE2D4586DF005C3733",
+        "name" : "EssentialFeediOSTests"
+      }
     }
   ],
   "version" : 1
