@@ -1,10 +1,3 @@
-//
-//  FailableRetrieveFeedStoreSpecs.swift
-//  EssentialFeedTests
-//
-//  Created by Alex Ward on 2025-01-12.
-//
-
 import Foundation
 import XCTest
 import EssentialFeed

@@ -1,10 +1,3 @@
-//
-//  FeedStoreSpy.swift
-//  EssentialFeedTests
-//
-//  Created by Alex Ward on 2025-01-06.
-//
-
 import Foundation
 import EssentialFeed
 

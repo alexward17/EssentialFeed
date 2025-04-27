@@ -1,10 +1,3 @@
-//
-//  XCTestCase+FeedLoader.swift
-//  EssentialAppTests
-//
-//  Created by Alex Ward on 2025-04-19.
-//
-
 import Foundation
 import EssentialFeed
 import XCTest

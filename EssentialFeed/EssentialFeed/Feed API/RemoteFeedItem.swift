@@ -1,10 +1,3 @@
-//
-//  RemoteFeedImage.swift
-//  EssentialFeed
-//
-//  Created by Alex Ward on 2025-01-05.
-//
-
 import Foundation
 
 internal struct RemoteFeedItem: Codable {

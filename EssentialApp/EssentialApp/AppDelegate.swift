@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  EssentialApp
-//
-//  Created by Alex Ward on 2025-04-12.
-//
-
 import UIKit
 
 @main

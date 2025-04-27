@@ -1,10 +1,3 @@
-//
-//  FeedCachePolicy.swift
-//  EssentialFeed
-//
-//  Created by Alex Ward on 2025-01-09.
-//
-
 import Foundation
 
 public enum FeedCachePolicy {

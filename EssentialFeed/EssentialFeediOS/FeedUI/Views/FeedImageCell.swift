@@ -1,10 +1,3 @@
-//
-//  FeedImageCell.swift
-//  EssentialFeediOS
-//
-//  Created by Alex Ward on 2025-01-26.
-//
-
 import UIKit
 
 public class FeedImageCell: UITableViewCell {

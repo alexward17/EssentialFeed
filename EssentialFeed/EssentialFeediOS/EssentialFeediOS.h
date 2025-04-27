@@ -1,10 +1,3 @@
-//
-//  EssentialFeediOS.h
-//  EssentialFeediOS
-//
-//  Created by Alex Ward on 2025-01-25.
-//
-
 #import <Foundation/Foundation.h>
 
 //! Project version number for EssentialFeediOS.

@@ -1,10 +1,3 @@
-//
-//  FeedStoreSpecs.swift
-//  EssentialFeedTests
-//
-//  Created by Alex Ward on 2025-01-11.
-//
-
 import Foundation
 
 protocol FeedStoreSpecs {

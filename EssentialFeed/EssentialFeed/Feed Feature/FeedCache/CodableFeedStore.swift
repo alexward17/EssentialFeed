@@ -1,10 +1,3 @@
-//
-//  CodableFeedStore.swift
-//  EssentialFeed
-//
-//  Created by Alex Ward on 2025-01-11.
-//
-
 import Foundation
 
 public class CodableFeedStore: FeedStore {

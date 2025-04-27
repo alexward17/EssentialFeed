@@ -6,12 +6,19 @@ protocol FeedImageCellControllerDelegate {
 }
 
 final class FeedImageCellController: FeedImageView {
+
+    // MARK: - Properties
+    
     private let delegate: FeedImageCellControllerDelegate
     private lazy var cell = FeedImageCell()
+
+    // MARK: - Initializers
 
     init(delegate: FeedImageCellControllerDelegate) {
         self.delegate = delegate
     }
+
+    // MARK: - Helper Functions
 
     func view() -> UITableViewCell {
         delegate.didRequestImage()

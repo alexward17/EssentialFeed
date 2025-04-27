@@ -1,10 +1,3 @@
-//
-//  FeedStore.swift
-//  EssentialFeed
-//
-//  Created by Alex Ward on 2025-01-04.
-//
-
 import Foundation
 
 public protocol FeedStore {

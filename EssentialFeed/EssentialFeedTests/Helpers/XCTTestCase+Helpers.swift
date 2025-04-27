@@ -1,10 +1,3 @@
-//
-//  XCTTestCase+MemoryLeakTracking.swift
-//  EssentialFeedTests
-//
-//  Created by Alex Ward on 2024-12-23.
-//
-
 import XCTest
 
 extension XCTestCase {
