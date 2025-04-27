@@ -33,15 +33,12 @@ final class FeedImageCellController: FeedImageView {
     }
 
     func display(_ viewModel: FeedImageViewModel<UIImage>) {
-     //   DispatchQueue.main.async { [weak self] in
-      //      guard let self else { return }
-            cell.locationContainer.isHidden = !viewModel.hasLocation
-            cell.locationLabel.text = viewModel.location
-            cell.descriptionLabel.text = viewModel.description
-            cell.feedImageView.image = viewModel.image
-            cell.feedImageContainer.isShimmering = viewModel.isLoading
-            cell.feedImageRetryButton.isHidden = !viewModel.shouldRetry
-            cell.onRetry = delegate.didRequestImage
-       // }
+        cell.locationContainer.isHidden = !viewModel.hasLocation
+        cell.locationLabel.text = viewModel.location
+        cell.descriptionLabel.text = viewModel.description
+        cell.feedImageView.image = viewModel.image
+        cell.feedImageContainer.isShimmering = viewModel.isLoading
+        cell.feedImageRetryButton.isHidden = !viewModel.shouldRetry
+        cell.onRetry = delegate.didRequestImage
     }
 }

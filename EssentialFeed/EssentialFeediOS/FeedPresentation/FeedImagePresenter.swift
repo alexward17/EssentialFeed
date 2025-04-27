@@ -1,7 +1,7 @@
 import Foundation
 import EssentialFeed
 
-protocol FeedImageView {
+public protocol FeedImageView {
     associatedtype Image
     func display(_ model: FeedImageViewModel<Image>)
 }
