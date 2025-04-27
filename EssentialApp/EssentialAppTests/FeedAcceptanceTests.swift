@@ -32,6 +32,22 @@ class FeedAcceptanceTests: XCTestCase {
         XCTAssertEqual(feed.numberOfRenderedFeedImageViews(), 0)
     }
 
+    func test_onEnteringBackground_deletesExpiredFeedCache() {
+        let store = InMemoryStore.withExpiredFeedCache
+
+        enterBackground(with: store)
+
+        XCTAssertNil(store.feedCache, "Expected to delete expired cache")
+    }
+
+    func test_onEnteringBackground_keepsNonExpiredFeedCache() {
+        let store = InMemoryStore.withNonExpiredFeedCache
+
+        enterBackground(with: store)
+
+        XCTAssertNotNil(store.feedCache, "Expected to keep non-expired cache")
+    }
+
     // MARK: - Helpers
 
     private func launch(
@@ -44,6 +60,12 @@ class FeedAcceptanceTests: XCTestCase {
 
         let nav = sut.window?.rootViewController as? UINavigationController
         return nav?.topViewController as! FeedViewController
+    }
+
+    private func enterBackground(with store: InMemoryStore) {
+        let sut = SceneDelegate(httpClient: HTTPClientStub.offline, store: store)
+
+        sut.sceneWillResignActive(UIApplication.shared.connectedScenes.first!)
     }
 
     private class HTTPClientStub: HTTPClient {
@@ -73,12 +95,11 @@ class FeedAcceptanceTests: XCTestCase {
 
     private class InMemoryStore: FeedStore, FeedImageDataStore {
 
-        private var feedCache: CachedFeed?
-        private var feedImageDataCache = [URL: Data]()
+        var feedCache: CachedFeed?
+        var feedImageDataCache = [URL: Data]()
 
-        init(feedCache: CachedFeed? = nil, feedImageDataCache: [URL : Data] = [URL: Data]()) {
+        public init(feedCache: CachedFeed? = nil) {
             self.feedCache = feedCache
-            self.feedImageDataCache = feedImageDataCache
         }
 
         func deleteCachedFeed(completion: @escaping DeletionCompletion) {
@@ -106,6 +127,14 @@ class FeedAcceptanceTests: XCTestCase {
 
         static var empty: InMemoryStore {
             InMemoryStore()
+        }
+
+        static var withExpiredFeedCache: InMemoryStore {
+            InMemoryStore(feedCache: EssentialFeed.CachedFeed(feed: [], timestamp: Date.distantPast))
+        }
+
+        static var withNonExpiredFeedCache: InMemoryStore {
+            InMemoryStore(feedCache: CachedFeed(feed: [], timestamp: Date()))
         }
 
     }
