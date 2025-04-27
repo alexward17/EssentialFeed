@@ -75,4 +75,8 @@ extension FeedViewController {
         dataSource?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
     }
 
+    func renderedFeedImageData(at index: Int) -> Data? {
+        simulateImageVisible(at: 0)?.renderedImage
+    }
+
 }
