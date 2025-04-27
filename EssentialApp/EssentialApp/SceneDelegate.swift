@@ -7,14 +7,16 @@ public class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     public var window: UIWindow?
 
-    let localStoreURL = NSPersistentContainer.defaultDirectoryURL.appending(path: "feed-store.sqlite")
-
     private lazy var httpClient: HTTPClient = {
         URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
     }()
 
     private lazy var store: FeedStore & FeedImageDataStore = {
-        try! CoreDataFeedStore(storeURL: localStoreURL)
+        try! CoreDataFeedStore(
+            storeURL: NSPersistentContainer.defaultDirectoryURL.appending(
+                path: "feed-store.sqlite"
+            )
+        )
     }()
 
     public convenience init(httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
@@ -31,39 +33,32 @@ public class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     public func configureWindow() {
         let url = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed/v1/feed")!
-        //  let session = URLSession(configuration: .ephemeral)
-        //  let client = URLSessionHTTPClient(session: session)
 
-        let remoteClient = makeRemoteClient()
-        let remoteFeedLoader = RemoteFeedLoader(url: url, client: remoteClient)
-        let remoteImageLoader = RemoteFeedImageDataLoader(client: remoteClient)
+        let remoteFeedLoader = RemoteFeedLoader(url: url, client: httpClient)
+        let remoteImageLoader = RemoteFeedImageDataLoader(client: httpClient)
 
         let localFeedLoader = LocalFeedLoader(store: store, currentDate: Date.init)
         let localImageLoader = LocalFeedImageDataLoader(store: store)
 
         window?.rootViewController = UINavigationController(
             rootViewController: FeedUIComposer
-            .feedComposedWith(
-                feedLoader: FeedLoaderWithFallbackComposite(
-                    primaryLoader: FeedLoaderCacheDecorator(
-                        decoratee: remoteFeedLoader,
-                        cache: localFeedLoader
+                .feedComposedWith(
+                    feedLoader: FeedLoaderWithFallbackComposite(
+                        primaryLoader: FeedLoaderCacheDecorator(
+                            decoratee: remoteFeedLoader,
+                            cache: localFeedLoader
+                        ),
+                        fallbackLoader: localFeedLoader
                     ),
-                    fallbackLoader: localFeedLoader
-                ),
-                imageLoader: FeedImageDataLoaderWithFallbackComposite(
-                    primaryLoader: localImageLoader,
-                    fallbackLoader: FeedImageDataLoaderCacheDecorator(
-                        decoratee: remoteImageLoader,
-                        cache: localImageLoader
+                    imageLoader: FeedImageDataLoaderWithFallbackComposite(
+                        primaryLoader: localImageLoader,
+                        fallbackLoader: FeedImageDataLoaderCacheDecorator(
+                            decoratee: remoteImageLoader,
+                            cache: localImageLoader
+                        )
                     )
                 )
-            )
         )
-    }
-
-    func makeRemoteClient() -> HTTPClient {
-        httpClient
     }
 
 }
