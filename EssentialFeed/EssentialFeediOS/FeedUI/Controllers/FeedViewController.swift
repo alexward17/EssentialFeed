@@ -1,7 +1,8 @@
 import UIKit
+import EssentialFeed
 
 public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, FeedErrorView {
-    public func display(_ viewModel: FeedErrorViewModel) {
+    public func display(_ viewModel: EssentialFeed.FeedErrorViewModel) {
         return
     }
 
@@ -9,7 +10,7 @@ public class FeedViewController: UITableViewController, UITableViewDataSourcePre
 
     public var refreshController: FeedRefreshViewController?
     private var cellControllers = [IndexPath: FeedImageCellController]()
-    final var tableModel = [FeedImageCellController]() { didSet { tableView.reloadData() } }
+    public final var tableModel = [FeedImageCellController]() { didSet { tableView.reloadData() } }
 
     private var onViewAppearing: ((FeedViewController) -> Void)?
 

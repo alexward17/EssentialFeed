@@ -1,7 +1,7 @@
 import EssentialFeed
 import XCTest
 
-class FeedImageDataLoaderSpy: FeedLoader, FeedImageDataLoader {
+class FeedDataLoaderSpy: FeedLoader, FeedImageDataLoader {
 
     // MARK: - Feed Loader Properties
 
@@ -61,5 +61,47 @@ class FeedImageDataLoaderSpy: FeedLoader, FeedImageDataLoader {
     func completeImageLoadingWithError(at index: Int = .zero) {
         imageRequests[index].completion(.failure(XCTestCase.anyError))
     }
+
+}
+
+public extension XCTestCase {
+    func checkForMemoryLeaks(
+        _ instance: AnyObject,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(
+                instance, "Instance should have been deallocated. pottential memory leak",
+                file: #filePath,
+                line: #line
+            )
+        }
+    }
+
+    static var mockNSError: NSError {
+        NSError(domain: "any error", code: 0)
+    }
+
+    static var mockURL: URL {
+        URL(string: "http://any-url.com")!
+    }
+
+    static var mockData: Data {
+        Data("any data".utf8)
+    }
+    static let mockEmptyData = Data()
+    static let mockAnyURL = URL(string: "https://example.com")!
+   // static let anyData = Data("Any data".utf8)
+    static let anyError = NSError(domain: "any error", code: 1)
+    static let anyHTTPURLResponse = HTTPURLResponse(
+        url: mockURL, statusCode: .zero,
+        httpVersion: nil, headerFields: [:]
+    )
+
+    static let nonHTTPURLResponse = URLResponse(
+        url: mockURL, mimeType: nil,
+        expectedContentLength: .zero, textEncodingName: nil
+    )
 
 }

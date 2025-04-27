@@ -69,7 +69,7 @@ public class FeedPresenter {
     
     // MARK: - Helper Functions
     
-    public func didStartLoadingFeed() {
+    public final func didStartLoadingFeed() {
         errorView.display(.noError)
         loadingView.display(FeedLoadingViewModel(isLoading: true))
     }

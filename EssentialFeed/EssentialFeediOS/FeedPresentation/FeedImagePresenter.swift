@@ -6,7 +6,7 @@ public protocol FeedImageView {
     func display(_ model: FeedImageViewModel<Image>)
 }
 
-final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
+public final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
 
     // MARK: - Private Properties
 
@@ -15,7 +15,7 @@ final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == I
 
     // MARK: - Initializers
 
-    init(
+    public init(
         view: View,
         imageTransformer: @escaping (Data) -> Image?
     ) {
@@ -23,7 +23,7 @@ final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == I
         self.imageTransformer = imageTransformer
     }
 
-    func didStartLoadingImageData(for model: FeedImage) {
+    public func didStartLoadingImageData(for model: FeedImage) {
         view.display(FeedImageViewModel(
             description: model.description,
             location: model.location,
@@ -34,7 +34,7 @@ final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == I
 
     private struct InvalidImageDataError: Error {}
 
-    func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
+    public func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
         guard let image = imageTransformer(data) else {
             return didFinishLoadingImageData(with: InvalidImageDataError(), for: model)
         }
@@ -46,7 +46,7 @@ final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == I
             shouldRetry: false))
     }
 
-    func didFinishLoadingImageData(with error: Error,for model: FeedImage) {
+    public func didFinishLoadingImageData(with error: Error,for model: FeedImage) {
         view.display(FeedImageViewModel(
             description: model.description,
             location: model.location,

@@ -337,11 +337,11 @@
 			isa = PBXGroup;
 			children = (
 				080EDF0121B6DA7E00813479 /* Info.plist */,
-				C7EBACF32D19BE9200662611 /* Helpers */,
 				C73444CC2D272B56007199B4 /* FeedCache */,
 				C7741E352D15D78A00917273 /* FeedApi */,
 				C7269A0D2D8F08C6008B859C /* FeedPresentation */,
 				C715D4422D0BC6F90070CC83 /* EssentialFeedTests-Bridging-Header.h */,
+				C7EBACF32D19BE9200662611 /* TestHelpers */,
 			);
 			path = EssentialFeedTests;
 			sourceTree = "<group>";
@@ -481,12 +481,12 @@
 			path = FeedApi;
 			sourceTree = "<group>";
 		};
-		C7EBACF32D19BE9200662611 /* Helpers */ = {
+		C7EBACF32D19BE9200662611 /* TestHelpers */ = {
 			isa = PBXGroup;
 			children = (
 				C7EBACF42D19BEDA00662611 /* XCTTestCase+Helpers.swift */,
 			);
-			path = Helpers;
+			path = TestHelpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
