@@ -130,7 +130,7 @@ class FeedAcceptanceTests: XCTestCase {
         }
 
         static var withExpiredFeedCache: InMemoryStore {
-            InMemoryStore(feedCache: EssentialFeed.CachedFeed(feed: [], timestamp: Date.distantPast))
+            InMemoryStore(feedCache: CachedFeed(feed: [], timestamp: Date.distantPast))
         }
 
         static var withNonExpiredFeedCache: InMemoryStore {
