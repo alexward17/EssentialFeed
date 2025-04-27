@@ -8,7 +8,6 @@ protocol FeedImageCellControllerDelegate {
 final class FeedImageCellController: FeedImageView {
 
     // MARK: - Properties
-    
     private let delegate: FeedImageCellControllerDelegate
     private lazy var cell = FeedImageCell()
 
@@ -34,12 +33,15 @@ final class FeedImageCellController: FeedImageView {
     }
 
     func display(_ viewModel: FeedImageViewModel<UIImage>) {
-        cell.locationContainer.isHidden = !viewModel.hasLocation
-        cell.locationLabel.text = viewModel.location
-        cell.descriptionLabel.text = viewModel.description
-        cell.feedImageView.image = viewModel.image
-        cell.feedImageContainer.isShimmering = viewModel.isLoading
-        cell.feedImageRetryButton.isHidden = !viewModel.shouldRetry
-        cell.onRetry = delegate.didRequestImage
+     //   DispatchQueue.main.async { [weak self] in
+      //      guard let self else { return }
+            cell.locationContainer.isHidden = !viewModel.hasLocation
+            cell.locationLabel.text = viewModel.location
+            cell.descriptionLabel.text = viewModel.description
+            cell.feedImageView.image = viewModel.image
+            cell.feedImageContainer.isShimmering = viewModel.isLoading
+            cell.feedImageRetryButton.isHidden = !viewModel.shouldRetry
+            cell.onRetry = delegate.didRequestImage
+       // }
     }
 }
