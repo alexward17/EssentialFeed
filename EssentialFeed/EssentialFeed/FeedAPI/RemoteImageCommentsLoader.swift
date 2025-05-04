@@ -4,7 +4,7 @@ public final class RemoteImageCommentsLoader {
 
     // MARK: - Types
 
-    public typealias Result = FeedLoader.Result
+    public typealias Result = Swift.Result<[ImageComment], Swift.Error>
 
     public enum Error: Swift.Error {
         case connectivity
@@ -25,7 +25,7 @@ public final class RemoteImageCommentsLoader {
 
     // MARK: - Loading Functions
 
-    public func load(completion: @escaping (Result) -> Void) {
+    public func load(completion: @escaping (RemoteImageCommentsLoader.Result) -> Void) {
         client.get(from: url, completion: { [weak self] result in
             guard self != nil else { return }
             switch result {
@@ -37,20 +37,13 @@ public final class RemoteImageCommentsLoader {
         })
     }
 
-    private static func map(_ data: Data, _ response: HTTPURLResponse) -> Result {
+    private static func map(_ data: Data, _ response: HTTPURLResponse) -> RemoteImageCommentsLoader.Result {
         do {
             let items = try ImageCommentsMapper.map(data, from: response)
             return .success(items.toModels())
         } catch {
             return .failure(error)
         }
-    }
-
-}
-
-private extension Array where Element == RemoteFeedItem {
-    func toModels() -> [FeedImage] {
-        map({ FeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.image) })
     }
 
 }
