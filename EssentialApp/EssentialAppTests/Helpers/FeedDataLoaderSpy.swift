@@ -1,7 +1,7 @@
 import EssentialFeed
 import XCTest
 
-class FeedDataLoaderSpy: FeedLoader, FeedImageDataLoader {
+class FeedDataLoaderSpy: FeedImageDataLoader {
 
     // MARK: - Feed Loader Properties
 
@@ -9,11 +9,11 @@ class FeedDataLoaderSpy: FeedLoader, FeedImageDataLoader {
         feedRequests.count
     }
 
-    private var feedRequests: [(FeedLoader.Result) -> Void] = []
+    private var feedRequests: [( Swift.Result<[FeedImage], Error>) -> Void] = []
 
     // MARK: - Feed Loader Helper Functions
 
-    func load(completion: @escaping (FeedLoader.Result) -> Void) {
+    func load(completion: @escaping ( Swift.Result<[FeedImage], Error>) -> Void) {
         feedRequests.append(completion)
     }
 

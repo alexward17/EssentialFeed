@@ -1,22 +1,22 @@
 import EssentialFeed
 
-public class FeedLoaderCacheDecorator: FeedLoader {
+public class FeedLoaderCacheDecorator {
 
     // MARK: - Properties
 
-    final let decoratee: FeedLoader
+    final let decoratee: LocalFeedLoader
     final let cache: FeedCache
 
     // MARK: - Initializers
 
-    public init(decoratee: FeedLoader, cache: FeedCache) {
+    public init(decoratee: LocalFeedLoader, cache: FeedCache) {
         self.decoratee = decoratee
         self.cache = cache
     }
 
     // MARK: - Helpers
 
-    public func load(completion: @escaping (FeedLoader.Result) -> Void) {
+    public func load(completion: @escaping ( Swift.Result<[FeedImage], Error>) -> Void) {
         decoratee.load(completion: { [weak self] result in
             completion(result.map({ feed in
                 self?.cache.saveIgnoringResult(feed)
