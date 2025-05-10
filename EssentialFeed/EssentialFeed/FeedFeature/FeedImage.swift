@@ -12,4 +12,11 @@ public struct FeedImage: Equatable, Hashable {
         self.location = location
         self.url = url
     }
+
+    public init(remoteItem: RemoteFeedItem) {
+        self.id = remoteItem.id
+        self.description = remoteItem.description
+        self.location = remoteItem.location
+        self.url = remoteItem.image
+    }
 }

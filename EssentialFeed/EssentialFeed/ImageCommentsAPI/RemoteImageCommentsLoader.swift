@@ -40,7 +40,7 @@ public final class RemoteImageCommentsLoader {
     private static func map(_ data: Data, _ response: HTTPURLResponse) -> RemoteImageCommentsLoader.Result {
         do {
             let items = try ImageCommentsMapper.map(data, from: response)
-            return .success(items.toModels())
+            return .success(items)
         } catch {
             return .failure(error)
         }

@@ -5,7 +5,7 @@ public final class ImageCommentsMapper {
         let items: [RemoteImageCommentItem]
     }
 
-    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [RemoteImageCommentItem] {
+    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [ImageComment] {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         print("debug: isOK = \(isOK(response))")
@@ -13,7 +13,7 @@ public final class ImageCommentsMapper {
             throw RemoteImageCommentsLoader.Error.invalidData
         }
 
-        return root.items
+        return root.items.map({ .init(remoteComment: $0) })
     }
 
     private static func isOK(_ response: HTTPURLResponse) -> Bool {
@@ -22,8 +22,20 @@ public final class ImageCommentsMapper {
 
 }
 
-public extension Array where Element == RemoteImageCommentItem {
-    func toModels() -> [ImageComment] {
-        map { ImageComment(id: $0.id, massage: $0.message, createAt: $0.created_at, username: $0.author.username) }
+public struct RemoteImageCommentItem: Codable {
+    let id: UUID
+    let message: String
+    let created_at: Date
+    let author: Author
+
+    public struct Author: Codable {
+        public let username: String
+    }
+
+    public init(id: UUID, message: String, created_at: Date, author: Author) {
+        self.id = id
+        self.message = message
+        self.created_at = created_at
+        self.author = author
     }
 }

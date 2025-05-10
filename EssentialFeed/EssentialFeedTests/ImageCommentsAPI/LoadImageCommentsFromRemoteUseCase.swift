@@ -3,7 +3,6 @@ import EssentialFeed
 
 class LoadImageCommentsFromRemoteUseCase: XCTestCase {
 
-
     func test_init_doesNotRequestDataFromURL() {
         let (_, client) = makeSUT()
 
@@ -134,7 +133,7 @@ class LoadImageCommentsFromRemoteUseCase: XCTestCase {
     }
 
     private func makeItem(id: UUID, message: String, createdAt:  (date: Date, iso8601String: String), username: String) -> (model: ImageComment, json: [String: Any]) {
-        let item = ImageComment(id: id, massage: message, createAt: createdAt.date, username: username)
+        let item = ImageComment(id: id, massage: message, createdAt: createdAt.date, username: username)
 
         let json: [String: Any] = [
             "id": id.uuidString,
