@@ -10,8 +10,8 @@ public final class WeakRefVirtualProxy<T: AnyObject> {
     }
 }
 
-extension WeakRefVirtualProxy: FeedLoadingView where T: FeedLoadingView {
-    public func display(_ viewModel: FeedLoadingViewModel) {
+extension WeakRefVirtualProxy: ResourceLoadingView where T: ResourceLoadingView {
+    public func display(_ viewModel: ResourceLoadingViewModel) {
         object?.display(viewModel)
     }
 }
