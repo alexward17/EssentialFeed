@@ -49,7 +49,10 @@ public class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     private func makeRemoteFeedLoaderWithLocalFallback() -> FeedLoader.Publisher {
-        let url = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed/v1/feed")!
+        guard let url = URL(string: Endpoint.getFeed.path) else {
+            // Invalid state, GET feed endpoint URL should be valid.
+            fatalError("Could not create url for endpoint \(Endpoint.getFeed.path)")
+        }
 
         return httpClient
             .getPublisher(from: url).tryMap(FeedItemsMapper.map)

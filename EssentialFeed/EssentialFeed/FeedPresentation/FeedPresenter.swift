@@ -25,14 +25,14 @@ public class FeedPresenter {
     public static var title: String {
         return NSLocalizedString("FEED_VIEW_TITLE",
                                  tableName: "Feed",
-                                 bundle: Bundle(for: FeedPresenter.self),
+                                 bundle: Bundle(for: Self.self),
                                  comment: "Error message displayed when we can't load the image feed from the server")
     }
     
     
     private var feedLoadError: String {
         return NSLocalizedString("GENERIC_CONNECTION_ERROR",
-                                 tableName: "Feed",
+                                 tableName: "Shared",
                                  bundle: Bundle(for: FeedPresenter.self),
                                  comment: "Error message displayed when we can't load the image feed from the server")
     }
