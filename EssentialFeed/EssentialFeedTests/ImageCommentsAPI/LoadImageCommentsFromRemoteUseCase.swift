@@ -3,11 +3,12 @@ import EssentialFeed
 
 class LoadImageCommentsFromRemoteUseCase: XCTestCase {
 
-    func test_load_deliversErrorOnNon2xxHTTPResponse() {
+    func test_load_throwsErrorOnNon2xxHTTPResponse() {
         let (sut, client) = makeSUT()
 
         let samples = [199, 150, 300, 400, 500]
 
+        
         samples.enumerated().forEach { index, code in
             expect(sut, toCompleteWith: failure(.invalidData), when: {
                 let json = makeItemsJSON([])
