@@ -16,12 +16,15 @@ public final class FeedUIComposer {
             let refreshController = FeedRefreshViewController(delegate: presentationAdapter)
             let feedController = FeedViewController(refreshController: refreshController)
 
-            presentationAdapter.presenter = FeedPresenter(
-                feedView: FeedViewAdapter(
+            presentationAdapter.presenter = LoadResourcePresenter(
+                resourceView: FeedViewAdapter(
                     controller: feedController,
                     imageLoader: { imageLoader($0).dispatchOnMainQueue() }
                 ),
-                loadingView: WeakRefVirtualProxy(refreshController), errorView: WeakRefVirtualProxy(feedController))
+                loadingView: WeakRefVirtualProxy(refreshController),
+                errorView: WeakRefVirtualProxy(feedController),
+                mapper: FeedPresenter.map
+            )
 
             return feedController
         }
