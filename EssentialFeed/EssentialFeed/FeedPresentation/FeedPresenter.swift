@@ -1,57 +1,18 @@
 import Foundation
 
-public protocol FeedView {
-    func display(_ viewModel: FeedViewModel)
-}
-
 // MARK: - Feed Presenter
 
 public class FeedPresenter {
-    
+
     // MARK: - Properties
-    
-    public final var feedView: FeedView
-    public final var loadingView: ResourceLoadingView
-    public final let errorView: ResourceErrorView
-    
+
     public static var title: String {
-        return NSLocalizedString("FEED_VIEW_TITLE",
-                                 tableName: "Feed",
-                                 bundle: Bundle(for: Self.self),
-                                 comment: "Error message displayed when we can't load the image feed from the server")
-    }
-    
-    
-    private var feedLoadError: String {
-        return NSLocalizedString("GENERIC_CONNECTION_ERROR",
-                                 tableName: "Shared",
-                                 bundle: Bundle(for: FeedPresenter.self),
-                                 comment: "Error message displayed when we can't load the image feed from the server")
-    }
-    
-    // MARK: - Initializer
-    
-    public init(feedView: FeedView, loadingView: ResourceLoadingView, errorView: ResourceErrorView) {
-        self.feedView = feedView
-        self.loadingView = loadingView
-        self.errorView = errorView
-    }
-    
-    // MARK: - Helper Functions
-    
-    public final func didStartLoadingFeed() {
-        errorView.display(.noError)
-        loadingView.display(ResourceLoadingViewModel(isLoading: true))
-    }
-    
-    public final func didFinishLoadingFeed(with feed: [FeedImage]) {
-        feedView.display(Self.map(feed))
-        loadingView.display(ResourceLoadingViewModel(isLoading: false))
-    }
-    
-    public final func didFinishLoadingFeed(with error: Error) {
-        errorView.display(.error(message: feedLoadError))
-        loadingView.display(ResourceLoadingViewModel(isLoading: false))
+        return NSLocalizedString(
+            "FEED_VIEW_TITLE",
+            tableName: "Feed",
+            bundle: Bundle(for: Self.self),
+            comment: "Error message displayed when we can't load the image feed from the server"
+        )
     }
 
     public static func map(_ feed: [FeedImage]) -> FeedViewModel {
