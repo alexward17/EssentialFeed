@@ -1,15 +1,15 @@
 import Foundation
 
 public protocol ResourceView {
-    associatedtype ResourseViewModel
-    func display(_ viewModel: ResourseViewModel)
+    associatedtype ResourceViewModel
+    func display(_ viewModel: ResourceViewModel)
 }
 
 public class LoadResourcePresenter<Resource, View: ResourceView> {
 
     // MARK: - Types
 
-    public typealias Mapper = (Resource) -> View.ResourseViewModel
+    public typealias Mapper = (Resource) throws -> View.ResourceViewModel
 
     // MARK: - Properties
 
@@ -27,7 +27,7 @@ public class LoadResourcePresenter<Resource, View: ResourceView> {
         )
     }
 
-    // MARK: - Initializer
+    // MARK: - Initialize
 
     public init(resourceView: View, loadingView: ResourceLoadingView, errorView: ResourceErrorView, mapper: @escaping Mapper) {
         self.resourceView = resourceView
@@ -44,8 +44,12 @@ public class LoadResourcePresenter<Resource, View: ResourceView> {
     }
 
     public final func didFinishLoading(with ressource: Resource) {
-        resourceView.display(mapper(ressource))
-        loadingView.display(ResourceLoadingViewModel(isLoading: false))
+        do {
+            resourceView.display(try mapper(ressource))
+            loadingView.display(ResourceLoadingViewModel(isLoading: false))
+        } catch {
+            didFinishLoading(with: error)
+        }
     }
 
     public final func didFinishLoading(with error: Error) {
