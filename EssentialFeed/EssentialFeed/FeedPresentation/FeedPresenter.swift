@@ -4,10 +4,6 @@ public protocol FeedView {
     func display(_ viewModel: FeedViewModel)
 }
 
-public protocol FeedErrorView {
-    func display(_ viewModel: FeedErrorViewModel)
-}
-
 // MARK: - Feed Presenter
 
 public class FeedPresenter {
@@ -16,7 +12,7 @@ public class FeedPresenter {
     
     public final var feedView: FeedView
     public final var loadingView: ResourceLoadingView
-    public final let errorView: FeedErrorView
+    public final let errorView: ResourceErrorView
     
     public static var title: String {
         return NSLocalizedString("FEED_VIEW_TITLE",
@@ -35,7 +31,7 @@ public class FeedPresenter {
     
     // MARK: - Initializer
     
-    public init(feedView: FeedView, loadingView: ResourceLoadingView, errorView: FeedErrorView) {
+    public init(feedView: FeedView, loadingView: ResourceLoadingView, errorView: ResourceErrorView) {
         self.feedView = feedView
         self.loadingView = loadingView
         self.errorView = errorView

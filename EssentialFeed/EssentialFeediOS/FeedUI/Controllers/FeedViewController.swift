@@ -1,8 +1,8 @@
 import UIKit
 import EssentialFeed
 
-public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, FeedErrorView {
-    public func display(_ viewModel: EssentialFeed.FeedErrorViewModel) {
+public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceErrorView {
+    public func display(_ viewModel: EssentialFeed.ResourceErrorViewModel) {
         return
     }
 
