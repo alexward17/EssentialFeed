@@ -25,7 +25,7 @@ public class LoadResourcePresenter {
 
     // MARK: - Helper Functions
 
-    public final func didStartLoadingFeed() {
+    public final func didStartLoading() {
         errorView.display(.noError)
         loadingView.display(FeedLoadingViewModel(isLoading: true))
     }
