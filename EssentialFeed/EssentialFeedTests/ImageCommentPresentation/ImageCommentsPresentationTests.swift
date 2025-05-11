@@ -16,13 +16,13 @@ class ImageCommentsPresentationTests: XCTestCase {
             ImageComment(
                 id: UUID(),
                 massage: "a message",
-                createdAt: now.adding(minutes: -5),
+                createdAt: now.adding(minutes: -5, calendar: calendar),
                 username: "a username"
             ),
             ImageComment(
                 id: UUID(),
                 massage: "another message",
-                createdAt: now.adding(days: -1),
+                createdAt: now.adding(days: -1, calendar: calendar),
                 username: "another username"
             )
         ]
