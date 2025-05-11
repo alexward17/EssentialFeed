@@ -229,6 +229,8 @@
 		C7F31D162DD0231D0073FB4B /* ImageCommentsPresentationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentsPresentationTests.swift; sourceTree = "<group>"; };
 		C7F31D8D2DD024790073FB4B /* ImageCommentsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentsPresenter.swift; sourceTree = "<group>"; };
 		C7F31D902DD025400073FB4B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ImageComments.strings; sourceTree = "<group>"; };
+		C7F31D922DD025B80073FB4B /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/ImageComments.strings; sourceTree = "<group>"; };
+		C7F31D932DD025B90073FB4B /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/ImageComments.strings"; sourceTree = "<group>"; };
 		C7FCE8C82D4586DE005C3733 /* EssentialFeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EssentialFeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7FCE8CF2D4586DF005C3733 /* EssentialFeediOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeediOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -1101,6 +1103,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				C7F31D902DD025400073FB4B /* en */,
+				C7F31D922DD025B80073FB4B /* el */,
+				C7F31D932DD025B90073FB4B /* pt-BR */,
 			);
 			name = ImageComments.strings;
 			sourceTree = "<group>";
