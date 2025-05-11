@@ -7,11 +7,37 @@ class ImageCommentsPresentationTests: XCTestCase {
     }
 
     func test_map_createsViewModel() {
-        let feed = uniqueImageFeed().models
+        let now = Date()
 
-        let viewModel = ImageCommentsPresenter.map(feed)
+        let comments = [
+            ImageComment(
+                id: UUID(),
+                massage: "a message",
+                createdAt: now.adding(minutes: -5),
+                username: "a username"
+            ),
+            ImageComment(
+                id: UUID(),
+                massage: "another message",
+                createdAt: now.adding(days: -1),
+                username: "another username"
+            )
+        ]
 
-        XCTAssertEqual(viewModel.feed, feed)
+        XCTAssertEqual(
+            ImageCommentsPresenter.map(comments).comments, [
+                ImageCommentViewModel(
+                    message: "a message",
+                    date: "5 minutes ago",
+                    username: "a username"
+                ),
+                ImageCommentViewModel(
+                    message: "another message",
+                    date: "1 day ago",
+                    username: "another username"
+                )
+            ]
+        )
     }
 
     // MARK: - Helpers
