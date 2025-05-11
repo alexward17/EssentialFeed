@@ -8,13 +8,15 @@ public final class ImageCommentCell: UITableViewCell {
 
     // MARK: - Views
 
+    public lazy var container = UIView()
+
     public lazy var outerStack: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
             topStack, messageLabel
         ])
         stackView.axis = .vertical
         stackView.distribution = .fill
-        stackView.spacing = 0
+        stackView.spacing = 8
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -70,8 +72,6 @@ public final class ImageCommentCell: UITableViewCell {
         return label
     }()
 
-    var onRetry: (() -> Void)?
-
     // MARK: - Initializers
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -90,16 +90,18 @@ public final class ImageCommentCell: UITableViewCell {
         // accessibilityIdentifier added for UI acceptance tests
         accessibilityIdentifier = "image-comment-cell"
         selectionStyle = .none
-        contentView.addSubview(outerStack)
+        container.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(container)
+        container.addSubview(outerStack)
 
-        outerStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6).isActive = true
-        outerStack.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
-        outerStack.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20).isActive = true
-        outerStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6).isActive = true
-    }
+        container.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6).isActive = true
+        container.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
+        container.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20).isActive = true
+        container.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6).isActive = true
 
-    @objc private func retryActionButtonTapped() {
-        onRetry?()
+        outerStack.topAnchor.constraint(equalTo: container.topAnchor, constant: 6).isActive = true
+        outerStack.leftAnchor.constraint(equalTo: container.leftAnchor, constant: 20).isActive = true
+        outerStack.rightAnchor.constraint(equalTo: container.rightAnchor, constant: -20).isActive = true
     }
 
 }
@@ -111,8 +113,8 @@ public final class ImageCommentCell: UITableViewCell {
 @available(iOS 17, *)
 #Preview("Image Comment Cell") {
     let cell = ImageCommentCell()
-    cell.heightAnchor.constraint(equalToConstant: 300).isActive = true
-    cell.messageLabel.text = "clvfa;dsbdbf.skjdfbsdbfvds.jhbvfd.sjhdvfb.sjdfhvbs.djfvhbs.jdfhvb.sjdhfbv.jshbv.jshbdvfszdfkjvnskdfvjnskdfvjksdfvbvksdfbvksjfdbvksbfdkvjsdfbvksjdfbvksjdfbvksjdfbvksjdfbvksjdbfvksjvbdfskjvfbkjbvfdksjdbfvkjsbdfkvjsbdkfvjbvhgvkhgv2skdfjvbskdjfvbksdjfvbskjfvbksjdfb.jshdbfv.ifvhalsdjfba;sd"
+    cell.heightAnchor.constraint(equalToConstant: 700).isActive = true
+    cell.messageLabel.text = "clvfa;dsbdbf.skjdfbsdbfvds.jhbvfd.sjhdvfb.sjdfhvbs.djfvhbs.jdfhvb.sjdhfbv.jshbv.jshbdvfszdfkjvnskdfvjnskdfvjksdfvbvksdfbvksjfdbvksbfdkvjsdfbvksjdfbvksjdfbvksjdfbvksjdfbvksjdbfvksjvbdfskjvfbkjbvfdksjdbfvkjsbdfkvjsbdkfvjbvhgvkhgv2skdfjvbskdjfvbksdjfvbskjfvbksjdfb.jshdbfv.ifvhalsdjfb sd;fh bsdlfjhbaldfjhb sjdfhb l.sdfhjzb .zjdfhb .ùhz b.jdfhb v.zjhbdf .zjhdfb .zjhdbf .zjhfb .zjhdfb .zjhdfb .zjdbf .zjhbf .jzhbf .jhzbdf .bzdf. bhzdf. bzd.j fbz.djhfb z.jdhfb .zjhbd .zjhdbf .jzhdbf .zjhb .dfzjhb  a;sd"
     cell.usernameLabel.text = "Bobby Lee"
     cell.dateLabel.text =  "110 years ago"
 
