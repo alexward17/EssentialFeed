@@ -1,6 +1,14 @@
 import UIKit
 import EssentialFeed
 
+public protocol CellController {
+
+    func view(in: UITableView) -> UITableViewCell
+    func preload()
+    func cancelLoad()
+
+}
+
 public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceErrorView {
     public func display(_ viewModel: EssentialFeed.ResourceErrorViewModel) {
         return
@@ -8,10 +16,10 @@ public class FeedViewController: UITableViewController, UITableViewDataSourcePre
 
     // MARK: - Properties
 
-    public var loadingControllers = [IndexPath: FeedImageCellController]()
+    public var loadingControllers = [IndexPath: CellController]()
     public var refreshController: FeedRefreshViewController?
-    private var cellControllers = [IndexPath: FeedImageCellController]()
-    public final var tableModel = [FeedImageCellController]() { didSet { tableView.reloadData() } }
+    private var cellControllers = [IndexPath: CellController]()
+    public final var tableModel = [CellController]() { didSet { tableView.reloadData() } }
 
     private var onViewAppearing: ((FeedViewController) -> Void)?
 
@@ -77,7 +85,7 @@ extension FeedViewController {
         loadingControllers[indexPath] = nil
     }
 
-    private func cellController(forRowAt indexPath: IndexPath) -> FeedImageCellController {
+    private func cellController(forRowAt indexPath: IndexPath) -> CellController {
         let controller = tableModel[indexPath.row]
         loadingControllers[indexPath] = controller
         return controller

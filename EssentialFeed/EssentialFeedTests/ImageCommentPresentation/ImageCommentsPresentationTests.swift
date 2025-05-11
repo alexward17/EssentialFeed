@@ -2,6 +2,7 @@ import XCTest
 import EssentialFeed
 
 class ImageCommentsPresentationTests: XCTestCase {
+
     func test_titleIsLocalized() {
         XCTAssertEqual(ImageCommentsPresenter.title, localized("IMAGE_COMMENTS_VIEW_TITLE"))
     }
