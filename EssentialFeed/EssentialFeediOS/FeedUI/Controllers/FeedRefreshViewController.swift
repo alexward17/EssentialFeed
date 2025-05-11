@@ -1,10 +1,6 @@
 import UIKit
 import EssentialFeed
 
-public protocol FeedRefreshViewControllerDelegate {
-    func didRequestFeedRefresh()
-}
-
 public final class FeedRefreshViewController: NSObject, ResourceLoadingView {
 
     public func display(_ viewModel: ResourceLoadingViewModel) {
@@ -13,23 +9,16 @@ public final class FeedRefreshViewController: NSObject, ResourceLoadingView {
 
     // MARK: - Properties
 
-    private let delegate: FeedRefreshViewControllerDelegate
+    public final var onRefresh: (() -> Void)?
 
     // MARK: - Views
 
     public final lazy var view: UIRefreshControl = loadView(UIRefreshControl())
 
-    // MARK: - Initializers
-
-    public init(delegate: FeedRefreshViewControllerDelegate) {
-        self.delegate = delegate
-        super.init()
-    }
-
     // MARK: - Objc Functions
 
     @objc final func refresh() {
-        delegate.didRequestFeedRefresh()
+        onRefresh?()
     }
 
     private final func loadView(_ view: UIRefreshControl) -> UIRefreshControl {

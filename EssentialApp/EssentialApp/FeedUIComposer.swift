@@ -13,7 +13,8 @@ public final class FeedUIComposer {
                 loader: { feedLoader().dispatchOnMainQueue() }
             )
 
-            let refreshController = FeedRefreshViewController(delegate: presentationAdapter)
+            let refreshController = FeedRefreshViewController()
+            refreshController.onRefresh = presentationAdapter.loadResource
             let feedController = ListViewController(refreshController: refreshController)
 
             presentationAdapter.presenter = LoadResourcePresenter(
