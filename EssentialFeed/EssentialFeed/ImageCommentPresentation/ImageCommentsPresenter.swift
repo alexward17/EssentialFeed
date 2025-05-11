@@ -1,15 +1,15 @@
 import Foundation
 
-public class FeedPresenter {
+public final class ImageCommentsPresenter {
 
     // MARK: - Properties
 
     public static var title: String {
         return NSLocalizedString(
-            "FEED_VIEW_TITLE",
-            tableName: "Feed",
+            "IMAGE_COMMENTS_VIEW_TITLE",
+            tableName: "ImageComments",
             bundle: Bundle(for: Self.self),
-            comment: "Error message displayed when we can't load the image feed from the server"
+            comment: "Error message displayed when we can't load the image comments from the server"
         )
     }
 
