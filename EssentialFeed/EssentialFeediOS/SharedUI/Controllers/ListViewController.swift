@@ -3,7 +3,7 @@ import EssentialFeed
 
 public protocol CellController {
 
-    func view(in: UITableView) -> UITableViewCell
+    func view(in tableView: UITableView) -> UITableViewCell
     func preload()
     func cancelLoad()
 
