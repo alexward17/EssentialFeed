@@ -9,7 +9,7 @@ public protocol CellController {
 
 }
 
-public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceErrorView {
+public class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceErrorView {
     public func display(_ viewModel: EssentialFeed.ResourceErrorViewModel) {
         return
     }
@@ -21,7 +21,7 @@ public class FeedViewController: UITableViewController, UITableViewDataSourcePre
     private var cellControllers = [IndexPath: CellController]()
     public final var tableModel = [CellController]() { didSet { tableView.reloadData() } }
 
-    private var onViewAppearing: ((FeedViewController) -> Void)?
+    private var onViewAppearing: ((ListViewController) -> Void)?
 
     // MARK: - Initializers
 
@@ -58,7 +58,7 @@ public class FeedViewController: UITableViewController, UITableViewDataSourcePre
 
 }
 
-extension FeedViewController {
+extension ListViewController {
 
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         tableModel.count
